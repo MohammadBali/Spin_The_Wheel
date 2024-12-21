@@ -59,7 +59,14 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              title:  Text(Localization.translate('appBar_title_home'), style: TextStyle(fontFamily: 'WithoutSans'),),
+              title:  Text(
+                Localization.translate('appBar_title_home'),
+                style: TextStyle(
+                    fontFamily: AppCubit.language == 'en'
+                        ? 'WithoutSans'
+                        : 'Cairo'
+                ),
+              ),
 
               bottom: defaultTabBar(
                   context: context,

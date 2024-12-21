@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget
                           'assets/images/splash/wheel.png',
                         ),
                         height: MediaQuery.of(context).size.height /2,
-                        width: MediaQuery.of(context).size.width /1.4,
+                        width: MediaQuery.of(context).size.width /2,
                       ),
                     ),
 
