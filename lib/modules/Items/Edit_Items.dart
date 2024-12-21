@@ -61,7 +61,7 @@ class _EditItemsState extends State<EditItems> {
                     [
                       Text(
                         Localization.translate('item_details'),
-                        style: headlineStyleBuilder(),
+                        style: headlineStyleBuilder(fontSize: 24),
                       ),
 
                       const SizedBox(height: 20,),
