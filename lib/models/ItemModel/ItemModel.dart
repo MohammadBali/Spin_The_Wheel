@@ -22,7 +22,6 @@ class ItemsModel
 
 }
 
-
 class ItemModel
 {
   int? id;
