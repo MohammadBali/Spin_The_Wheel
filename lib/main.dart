@@ -15,7 +15,11 @@ Future<void> main() async
 
   //Load Language using Localization
   AppCubit.language= CacheHelper.getData(key: 'language');
-  AppCubit.language ??= 'en';
+  AppCubit.language ??= 'ar';
+
+
+  AppCubit.currentColorChoice = CacheHelper.getData(key: 'currentColorChoice');
+  AppCubit.currentColorChoice??='rainbow_choices';
 
   // Set the Initial Local; Language
   await Localization.load(Locale(AppCubit.language!));

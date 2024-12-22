@@ -12,7 +12,9 @@ class _SettingsState extends State<Settings> {
 
   List<String> listOfLanguages = ['ar','en'];
 
-  String currentLanguage= AppCubit.language??='en';
+  String currentLanguage= AppCubit.language??='ar';
+
+  String currentColorChoice = AppCubit.currentColorChoice??='rainbow_choices';
 
   @override
   Widget build(BuildContext context)
@@ -58,13 +60,15 @@ class _SettingsState extends State<Settings> {
 
       Center(
         child: CircleAvatar(
-          radius: 85,
+          radius: 70,
           backgroundColor: Colors.transparent,
           child: Image(
             image: AssetImage('assets/images/personal/personal.png'),
           ),
         ),
       ),
+
+      const SizedBox(height: 10,),
 
       Text(
         '${Localization.translate('welcome_back')}!',
@@ -132,7 +136,87 @@ class _SettingsState extends State<Settings> {
                             child: Row(
                               children: [
                                 Text(
-                                    value == 'ar' ? 'Arabic' : 'English'
+                                  value == 'ar' ? Localization.translate('arabic') : Localization.translate('english'),
+                                  style: TextStyle(fontFamily: AppCubit.language == 'ar'? 'Cairo' : null),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      const SizedBox(height: 25,),
+
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children:
+        [
+          const Icon(Icons.color_lens_outlined),
+
+          const SizedBox(width: 5,),
+
+          Text(
+            Localization.translate('coloring_scheme'),
+            style: textStyleBuilder(fontSize: 18),
+          ),
+
+          const Spacer(),
+
+          Expanded(
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: FormField<String>(
+                builder: (FormFieldState<String> state) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      errorStyle:const TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                      labelText: Localization.translate('coloring_scheme'),
+                    ),
+
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        style: TextStyle(color: cubit.isDarkTheme? defaultDarkColor : defaultColor),
+                        value: currentColorChoice,
+                        isDense: true,
+                        onChanged: (newValue) {
+                          setState(() {
+                            currentColorChoice = newValue!;
+                            state.didChange(newValue);
+
+                            CacheHelper.saveData(key: 'currentColorChoice', value: newValue).then((value){
+                              cubit.setCurrentColorChoice(newValue);
+
+                            }).catchError((error)
+                            {
+                              debugPrint('ERROR WHILE SWITCHING COLOR SCHEME, ${error.toString()}');
+                              snackBarBuilder(message: error.toString(), context: context);
+                            });
+                          });
+                        },
+
+                        items: cubit.colorChoices.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    Localization.translate(value),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontFamily: AppCubit.language == 'ar'? 'Cairo' : null),
+                                  ),
                                 ),
                               ],
                             ),
@@ -175,6 +259,39 @@ class _SettingsState extends State<Settings> {
             onChanged: (val)
             {
               cubit.changeTheme();
+            },
+
+          ),
+        ],
+      ),
+
+      const SizedBox(height: 15,),
+
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children:
+        [
+          Icon(
+              cubit.shuffleColors
+                  ?Icons.shuffle_on_outlined
+                  :Icons.shuffle_outlined
+          ),
+
+          const SizedBox(width: 5,),
+
+          Text(
+            Localization.translate('shuffle_color'),
+            style: textStyleBuilder(fontSize: 18),
+          ),
+
+          const Spacer(),
+
+          Switch(
+            value: cubit.shuffleColors,
+            padding: EdgeInsets.zero,
+            onChanged: (val)
+            {
+              cubit.changeShuffleColor();
             },
 
           ),

@@ -176,6 +176,8 @@ class AppCubit extends Cubit<AppStates>
   ///List of Colors
   late List<Color> wheelColors;
 
+  ///Shuffle Colors?
+  bool shuffleColors=false;
 
   ///Set The Colors Range for the Wheel
   void setWheelColors()
@@ -183,11 +185,38 @@ class AppCubit extends Cubit<AppStates>
     wheelColors = generateHarmoniousColors(
       currentColorScheme(),
       count: 12, // Generate 12 harmonious colors
+      isRainbow: currentColorChoice != colorChoices[0]? false : true,
     );
 
-    wheelColors.shuffle();
+    if(shuffleColors)
+    {
+      wheelColors.shuffle();
+    }
 
     emit(AppChangeWheelColorsState());
+  }
+
+  ///Set Shuffle Colors
+  void changeShuffleColor()
+  {
+    shuffleColors = !shuffleColors;
+    emit(AppSetShuffleColorState());
+  }
+
+  ///List of Color Choices
+  List<String> colorChoices=['rainbow_choices', 'color_scheme_choices'];
+
+  ///Current Color Choice; aka rainbow Choice
+  static String? currentColorChoice;
+
+  ///Set The Choice
+  void setCurrentColorChoice(String value)
+  {
+    colorChoices.contains(value)
+      ?currentColorChoice = value
+      :currentColorChoice = colorChoices[0];
+
+    emit(AppSetCurrentColorChoiceState());
   }
   //--------------------------------------------------\\
 

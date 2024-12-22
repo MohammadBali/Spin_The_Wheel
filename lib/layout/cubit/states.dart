@@ -87,7 +87,13 @@ class AppSpinWheelErrorState extends AppStates{
 
 class AppSpinWheelNoMoreAttemptsState extends AppStates{}
 
+//WHEEL COLORS
+
 class AppChangeWheelColorsState extends AppStates{}
+
+class AppSetShuffleColorState extends AppStates{}
+
+class AppSetCurrentColorChoiceState extends AppStates{}
 
 //------------------------------------
 

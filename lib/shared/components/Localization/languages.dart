@@ -19,6 +19,9 @@ const Map<String,String> en={
   'exit':'Exit',
   'language_name_general_settings':'Language',
 
+  'arabic':'Arabic',
+
+  'english':'English',
 
   //App Bar
   'appBar_title_home':'Spin & Win',
@@ -83,6 +86,8 @@ const Map<String,String> en={
 
   'welcome_back':'Welcome Back',
   'dark_mode':'Dark Mode',
+
+  'shuffle_color':'Shuffle Colors',
   'sign_out':'Sign Out & Exit',
 
   'items':'Items',
@@ -90,6 +95,12 @@ const Map<String,String> en={
   'items_details':'Items Details',
 
   'edit_items':'Edit Items',
+
+  'coloring_scheme':'Scheme',
+
+  'rainbow_choices':'Rainbow Colors',
+
+  'color_scheme_choices':'From Current Scheme',
 
   //--------------------------------------------------------------------\\
 
@@ -156,7 +167,11 @@ const Map<String,String> ar={
 
   'error':'حدث خطأ أثناء العملية',
   'exit':'الخروج',
-  'language_name_general_settings':'اللغة',
+  'language_name_general_settings':'اللغة الحالية',
+
+  'arabic':'العربية',
+
+  'english':'الإنجليزية',
 
   //App Bar
 
@@ -224,6 +239,8 @@ const Map<String,String> ar={
 
   'dark_mode':'الوضع الداكن',
 
+  'shuffle_color':'خلط الألوان',
+
   'sign_out':'تسجيل الخروج والإغلاق',
 
   'items':'العناصر',
@@ -231,6 +248,14 @@ const Map<String,String> ar={
   'items_details':'تفاصيل العناصر',
 
   'edit_items':'تعديل العناصر',
+
+  'coloring_scheme':'مخطط الألوان',
+
+  'rainbow_choices':'ألوان قزحية',
+
+  'color_scheme_choices':'من مخطط الألوان الحالي',
+
+
 
   //--------------------------------------------------------------------\\
 

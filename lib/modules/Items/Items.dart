@@ -3,7 +3,6 @@ import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/modules/Items/Edit_Items.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
 import 'package:spinning_wheel/shared/components/app_components.dart';
-import 'package:string_extensions/string_extensions.dart';
 
 class AllItems extends StatefulWidget {
   const AllItems({super.key});

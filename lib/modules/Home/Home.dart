@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
@@ -233,8 +232,10 @@ class _HomeState extends State<Home> {
         return FortuneItem(
           child: Text(
               choice.label!,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontFamily: AppCubit.language == 'ar'
                     ?'Cairo'
                     :'WithoutSans'

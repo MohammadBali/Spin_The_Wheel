@@ -13,11 +13,11 @@ This Flutter project implements a customizable spinning wheel feature, ideal for
 
 ## Screenshots
 
-Items - HomePage - Settings
-[![Untitled-1.png](https://i.postimg.cc/sDgYH5K8/Untitled-1.png)](https://postimg.cc/XXtBpGRc)
+Home - Settings - Item Details
+[![Untitled-1.png](https://i.postimg.cc/J4FDsmGM/Untitled-1.png)](https://postimg.cc/Xpw7PRfz)
 
-Add an Item - Edit an Item - Result after Spinning
-[![Untitled-2.png](https://i.postimg.cc/bJMPXxkT/Untitled-2.png)](https://postimg.cc/xJKhMbsJ)
+Edit an Item - Add an Item - Spin Result
+[![Untitled-2.png](https://i.postimg.cc/Z5y93gd3/Untitled-2.png)](https://postimg.cc/5XbNWspN)
 
 ## Installation
 
