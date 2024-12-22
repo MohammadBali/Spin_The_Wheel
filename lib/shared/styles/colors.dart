@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
-Color seedColor = Colors.indigoAccent;
+Color seedColor = HexColor('5CE1E6');//Colors.indigoAccent;
 
 // Light and dark color schemes using `ColorScheme.fromSeed`
 final ColorScheme lightColorScheme = ColorScheme.fromSeed(

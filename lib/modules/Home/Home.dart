@@ -47,14 +47,21 @@ class _HomeState extends State<Home> {
 
   void spinWheel()
   {
-    playWheelSound(); // Start the sound when the wheel starts spinning
-    _controller.add(AppCubit.get(context).getWeightedRandomIndex());
+    if(! _isPlaying)
+    {
+      print('ab');
+      playWheelSound(); // Start the sound when the wheel starts spinning
+      _controller.add(AppCubit.get(context).getDependentRandomIndex());
+    }
   }
 
   void playWheelSound() async {
     if (!_isPlaying)
     {
-      _isPlaying = true;
+      setState(()
+      {
+        _isPlaying = true;
+      });
 
       // Loop the sound
       await _audioPlayer.setReleaseMode(ReleaseMode.release);
@@ -65,10 +72,14 @@ class _HomeState extends State<Home> {
   }
 
   void stopWheelSound() async {
-    if (_isPlaying) {
+    if (_isPlaying)
+    {
       _speedTimer?.cancel();
       await _audioPlayer.stop();
-      _isPlaying = false;
+
+      setState(() {
+        _isPlaying = false;
+      });
     }
   }
 
@@ -92,79 +103,85 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,AppStates>(
-        listener: (context,state){},
+        listener: (context,state)
+        {
+          if(state is AppSpinWheelNoMoreAttemptsState)
+          {
+            snackBarBuilder(context: context, message: Localization.translate('no_more_spins'));
+          }
+        },
         builder: (context,state)
         {
           var cubit = AppCubit.get(context);
           return OrientationBuilder(
               builder: (context,orientation)
-          {
-            if(orientation == Orientation.portrait)
-            {
-              return ConditionalBuilder(
-                condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
-                builder: (context)=>Column(
-                  children:
-                  [
-                    Text(
-                      Localization.translate('appBar_title_home'),
-                      style: headlineStyleBuilder(fontSize: 24, fontWeight: FontWeight.w500, color: currentColorScheme(context).secondary),
-                    ),
-
-                    const SizedBox(height: 20,),
-
-                    Center(
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height/ 2,
-                        width: MediaQuery.of(context).size.width /1.5,
-                        child: myWheel(cubit:cubit),
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    defaultButton(
-                      type: ButtonType.elevated,
-                      onPressed: spinWheel,
-                      message: Localization.translate('spin'),
-                    ),
-
-                  ],
-                ),
-                fallback: (context)=> Center(child: defaultProgressIndicator(context: context)),
-              );
-            }
-            else
-            {
-              return ConditionalBuilder(
-                condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
-                builder: (context)=>SingleChildScrollView(
-                  child: Column(
-                    children:
-                    [
-                      Center(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height/ 2,
-                          width: MediaQuery.of(context).size.width /1.2,
-                          child: myWheel(cubit:cubit),
+              {
+                if(orientation == Orientation.portrait)
+                {
+                  return ConditionalBuilder(
+                    condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
+                    builder: (context)=>Column(
+                      children:
+                      [
+                        Text(
+                          Localization.translate('appBar_title_home'),
+                          style: headlineStyleBuilder(fontSize: 24, fontWeight: FontWeight.w500, color: currentColorScheme(context).secondary),
                         ),
+
+                        const SizedBox(height: 20,),
+
+                        Center(
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height/ 2,
+                            width: MediaQuery.of(context).size.width /1.5,
+                            child: myWheel(cubit:cubit),
+                          ),
+                        ),
+
+                        const Spacer(),
+
+                        defaultButton(
+                          type: ButtonType.elevated,
+                          onPressed: spinWheel,
+                          message: Localization.translate('spin'),
+                        ),
+
+                      ],
+                    ),
+                    fallback: (context)=>Center(child: defaultProgressIndicator(context: context)),
+                  );
+                }
+                else
+                {
+                  return ConditionalBuilder(
+                    condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
+                    builder: (context)=>SingleChildScrollView(
+                      child: Column(
+                        children:
+                        [
+                          Center(
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height/ 2,
+                              width: MediaQuery.of(context).size.width /1.2,
+                              child: myWheel(cubit:cubit),
+                            ),
+                          ),
+
+                          const SizedBox(height: 25,),
+
+                          defaultButton(
+                            type: ButtonType.elevated,
+                            onPressed: spinWheel,
+                            message: Localization.translate('spin'),
+                          ),
+
+                        ],
                       ),
-                  
-                      const SizedBox(height: 25,),
-                  
-                      defaultButton(
-                        type: ButtonType.elevated,
-                        onPressed: spinWheel,
-                        message: Localization.translate('spin'),
-                      ),
-                  
-                    ],
-                  ),
-                ),
-                fallback: (context)=> Center(child: defaultProgressIndicator(context: context)),
-              );
-            }
-          });
+                    ),
+                    fallback: (context)=> Center(child: defaultProgressIndicator(context: context)),
+                  );
+                }
+              });
         },
 
     );
@@ -195,7 +212,7 @@ class _HomeState extends State<Home> {
 
       animateFirst: false,
 
-      items: cubit.items!.items!.map((choice) => FortuneItem(child: Text(choice.label!),),).toList(),
+      items: cubit.items!.items!.map((choice) => FortuneItem(child: Text(choice.label!, style: TextStyle(fontFamily: AppCubit.language == 'ar'? 'Cairo' : 'WithoutSans'),),),).toList(),
     );
   }
 

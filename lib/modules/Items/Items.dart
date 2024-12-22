@@ -68,110 +68,113 @@ class _AllItemsState extends State<AllItems> {
                     defaultButtonMessage: Localization.translate('submit_button'),
                     child: StatefulBuilder(builder: (context,setState)
                     {
-                      return Form(
-                        key: formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:
-                          [
-                            Center(
-                              child: Text(
-                                Localization.translate('new_item'),
-                                style: headlineStyleBuilder(),
+                      return Directionality(
+                        textDirection: appDirectionality(),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:
+                            [
+                              Center(
+                                child: Text(
+                                  Localization.translate('new_item'),
+                                  style: headlineStyleBuilder(),
+                                ),
                               ),
-                            ),
 
-                            const SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
 
-                            Text(
-                              Localization.translate('item_name'),
-                              style: textStyleBuilder(),
-                            ),
+                              Text(
+                                Localization.translate('item_name'),
+                                style: textStyleBuilder(),
+                              ),
 
-                            const SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
 
-                            defaultTextFormField(
-                              controller: labelController,
-                              keyboard: TextInputType.text,
-                              label: Localization.translate('item_name'),
-                              prefix: Icons.abc_outlined,
-                              validate: (value)
-                              {
-                                if(value ==null || value.isEmpty)
+                              defaultTextFormField(
+                                controller: labelController,
+                                keyboard: TextInputType.text,
+                                label: Localization.translate('item_name'),
+                                prefix: Icons.abc_outlined,
+                                validate: (value)
                                 {
-                                  return Localization.translate('empty_value');
-                                }
-                                return null;
-                              },
-                            ),
+                                  if(value ==null || value.isEmpty)
+                                  {
+                                    return Localization.translate('empty_value');
+                                  }
+                                  return null;
+                                },
+                              ),
 
-                            const SizedBox(height: 20,),
+                              const SizedBox(height: 20,),
 
-                            Text(
-                              Localization.translate('item_probability'),
-                              style: textStyleBuilder(),
-                            ),
+                              Text(
+                                Localization.translate('item_probability'),
+                                style: textStyleBuilder(),
+                              ),
 
-                            const SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
 
-                            defaultTextFormField(
-                              controller: probabilityController,
-                              keyboard: TextInputType.number,
-                              label: Localization.translate('item_probability'),
-                              prefix: Icons.numbers_outlined,
-                              validate: (value)
-                              {
-                                if(value==null || value.isEmpty)
+                              defaultTextFormField(
+                                controller: probabilityController,
+                                keyboard: TextInputType.number,
+                                label: Localization.translate('item_probability'),
+                                prefix: Icons.numbers_outlined,
+                                validate: (value)
                                 {
-                                  return Localization.translate('empty_value');
-                                }
+                                  if(value==null || value.isEmpty)
+                                  {
+                                    return Localization.translate('empty_value');
+                                  }
 
-                                if(isNumeric(value) == false)
+                                  if(isNumeric(value) == false)
+                                  {
+                                    return Localization.translate('prop_not_a_number');
+                                  }
+                                  return null;
+                                },
+                              ),
+
+                              const SizedBox(height: 20,),
+
+                              Text(
+                                Localization.translate('item_type'),
+                                style: textStyleBuilder(),
+                              ),
+
+                              const SizedBox(height: 10,),
+
+                              defaultFormField(
+                                context: context,
+                                dropDownButtonValue: type,
+                                onChanged: (value, formFieldState)
                                 {
-                                  return Localization.translate('prop_not_a_number');
-                                }
-                                return null;
-                              },
-                            ),
+                                  setState(() {
+                                    type = value;
+                                  });
 
-                            const SizedBox(height: 20,),
+                                },
+                                items: ItemType.values.map((ItemType value)
+                                {
+                                  return DropdownMenuItem<String>(
+                                    value: value.name,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          Localization.translate(value.name),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
 
-                            Text(
-                              Localization.translate('item_type'),
-                              style: textStyleBuilder(),
-                            ),
-
-                            const SizedBox(height: 10,),
-
-                            defaultFormField(
-                              context: context,
-                              dropDownButtonValue: type,
-                              onChanged: (value, formFieldState)
-                              {
-                                setState(() {
-                                  type = value;
-                                });
-
-                              },
-                              items: ItemType.values.map((ItemType value)
-                              {
-                                return DropdownMenuItem<String>(
-                                  value: value.name,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        value.name.capitalize,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-
-                            const SizedBox(height: 25,),
-                          ],
+                              const SizedBox(height: 25,),
+                            ],
+                          ),
                         ),
                       );
                     }),
@@ -183,7 +186,8 @@ class _AllItemsState extends State<AllItems> {
                         cubit.insertIntoDatabase(
                           label: labelController.value.text,
                           type: ItemType.values.byName(type!),
-                          probability: num.parse(probabilityController.value.text)
+                          probability: num.parse(probabilityController.value.text),
+                          remainingAttempts: (num.parse(probabilityController.value.text) * totalTrials).round()
                         );
 
                         labelController.value = TextEditingValue.empty;
@@ -213,9 +217,10 @@ class _AllItemsState extends State<AllItems> {
         children: [
           defaultListTile(
             title: item?.label,
-            subtitle: '${Localization.translate('item_probability')}: ${item?.probability}',
+            subtitle: '${Localization.translate('item_probability')} ${Localization.translate('in_100')}: ${item?.probability}\n${Localization.translate('item_remainingAttempts')}: ${item?.remainingAttempts}',
+            isThreeLine: true,
             enabled: true,
-            customLeading: Text('${index + 1}'),
+            customLeading: Text('${index + 1}', style: TextStyle(fontWeight: FontWeight.w600),),
           ),
 
           Row(

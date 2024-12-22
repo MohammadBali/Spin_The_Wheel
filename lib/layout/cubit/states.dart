@@ -85,6 +85,7 @@ class AppSpinWheelErrorState extends AppStates{
   AppSpinWheelErrorState({required this.message});
 }
 
+class AppSpinWheelNoMoreAttemptsState extends AppStates{}
 
 //------------------------------------
 

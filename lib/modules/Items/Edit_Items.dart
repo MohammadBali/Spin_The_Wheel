@@ -142,7 +142,7 @@ class _EditItemsState extends State<EditItems> {
                             child: Row(
                               children: [
                                 Text(
-                                  value.name.capitalize,
+                                  Localization.translate(value.name),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
@@ -165,7 +165,7 @@ class _EditItemsState extends State<EditItems> {
                                 widget.item.label = labelController.value.text;
                                 widget.item.type = ItemType.values.byName(type!);
                                 widget.item.probability = num.tryParse(probabilityController.value.text);
-
+                                widget.item.remainingAttempts =  (num.tryParse(probabilityController.value.text)! * totalTrials).round();
                                 cubit.alterItem(widget.item);
                                 Navigator.of(context).pop();
                               }

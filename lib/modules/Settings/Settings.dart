@@ -26,8 +26,7 @@ class _SettingsState extends State<Settings> {
           return RefreshIndicator(
             onRefresh: ()async
             {
-              cubit.setDefaultItems();
-             // cubit.getDatabase(cubit.database);
+              cubit.getDatabase(cubit.database);
             },
             child: OrientationBuilder(builder: (context,orientation)
             {

@@ -60,7 +60,7 @@ const Map<String,String> en={
 
   'home':'Home',
 
-  'spin':'Spin',
+  'spin':'Spin Now!',
 
   'settings':'Settings',
 
@@ -99,13 +99,23 @@ const Map<String,String> en={
 
   'item_probability':'Item Probability',
 
+  'in_100':'(in 100)',
+
   'item_name':'Item Name',
 
   'item_type':'Item Type',
 
+  'item_remainingAttempts':'Remaining Attempts',
+
   'prop_not_a_number':'Probability Should be a Number',
 
   'new_item':'Add a New Item!',
+
+  'win':'Win',
+
+  'loose':'Loose',
+
+  'tie':'Tie',
 
 
   //--------------------------------------------------------------------\\
@@ -119,6 +129,8 @@ const Map<String,String> en={
   'result_title_tie':'Try Again!',
 
   'result_title_loose':'Oops!',
+
+  'no_more_spins':'Reinitializing Spins to defaults....',
 
 
 };
@@ -135,10 +147,10 @@ const Map<String,String> ar={
   'success':'تمت بنجاح...',
   'refreshed':'تم التحديث...',
 
-  'updated':'تم التعديل...',
+  'updated':'تم تحديث البيانات...',
 
   'edit':'تعديل',
-  'delete':'حذف`',
+  'delete':'حذف',
 
   'spin_win':'أدر وأربح',
 
@@ -187,7 +199,7 @@ const Map<String,String> ar={
 
   'home':'الرئيسية',
 
-  'spin':'أدر',
+  'spin':'أدر الآن!',
 
   'settings':'الإعدادات',
 
@@ -228,13 +240,23 @@ const Map<String,String> ar={
 
   'item_probability':'احتمالية العنصر',
 
+  'in_100':'(في 100)',
+
   'item_name':'اسم العنصر',
 
   'item_type':'نوع العنصر',
 
+  'item_remainingAttempts':'الاحتمالات المتبقية',
+
   'prop_not_a_number':'الاحتمالية يحب أن تكون رقماً',
 
   'new_item':'أضف عنصراً جديداً',
+
+  'win':'ربح',
+
+  'loose':'خسارة',
+
+  'tie':'تعادل',
 
   //--------------------------------------------------------------------\\
 
@@ -246,6 +268,8 @@ const Map<String,String> ar={
 
   'result_title_tie':'حاول مجدداً!',
 
-  'result_title_loose':'حظاُ أوفر',
+  'result_title_loose':'حظاً أوفر',
+
+  'no_more_spins':'جاري إعادة التعيين...',
 
 };

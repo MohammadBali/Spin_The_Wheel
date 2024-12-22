@@ -1,3 +1,5 @@
+import 'package:spinning_wheel/shared/components/constants.dart';
+
 class ItemsModel
 {
   List<ItemModel>? items=[];
@@ -11,7 +13,12 @@ class ItemsModel
   {
     for (var item in json ?? [])
     {
-      items?.add(ItemModel.fromJson(item));
+      ItemModel i = ItemModel.fromJson(item);
+
+      if(!isMatch(i))
+      {
+        items?.add(i);
+      }
     }
   }
 
@@ -20,14 +27,29 @@ class ItemsModel
     items?.add(ItemModel.fromJson(item));
   }
 
+  ///Checks if a passed model already exactly exists
+  bool isMatch(ItemModel model)
+  {
+    for(ItemModel item in items ?? [])
+    {
+      if(item.id == model.id && item.remainingAttempts == model.remainingAttempts && item.probability == model.probability && item.type == model.type && item.label == model.label)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 }
 
 class ItemModel
 {
   int? id;
   String? label;
-  num? probability;
+  num? probability; //probability of occurring
   ItemType? type;
+  num? remainingAttempts; //dependent probabilities
 
   ItemModel.fromJson(Map<String,dynamic>json)
   {
@@ -35,9 +57,17 @@ class ItemModel
     label = json['label'];
     probability = json['probability'];
     type = ItemType.values.byName( json['type']);
+    remainingAttempts = json['remainingAttempts'];
   }
 
-  ItemModel({required this.id, required this.label, required this.probability, required this.type});
+  ///If manual reinitializing was needed
+  void initializeRemainingAttempts()
+  {
+    // Allocate remaining attempts based on probability
+    remainingAttempts = (probability! * totalTrials).round();
+  }
+
+  ItemModel({required this.id, required this.label, required this.probability, required this.type, required this.remainingAttempts});
 
   @override
   String toString() {
@@ -45,12 +75,16 @@ class ItemModel
         'id: $id\n'
         'label: $label\n'
         'type: $type\n'
-        'probability: $probability\n';
+        'probability: $probability\n'
+        'remainingAttempts: $remainingAttempts\n';
   }
 }
 
 
-
+///Item Type
+///[win] Winning -> Delegate a specific sound
+///[loose] Loosing -> Delegate a specific loosing sound
+///[tie] Tie; like try again or 2 more spins
 enum ItemType
 {
   win,
