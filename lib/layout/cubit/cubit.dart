@@ -4,6 +4,7 @@ import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/modules/Home/Home.dart';
 import 'package:spinning_wheel/modules/Settings/Settings.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
+import 'package:spinning_wheel/shared/components/app_components.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AppCubit extends Cubit<AppStates>
@@ -171,6 +172,23 @@ class AppCubit extends Cubit<AppStates>
     emit(AppSetCurrentItemState());
   }
 
+
+  ///List of Colors
+  late List<Color> wheelColors;
+
+
+  ///Set The Colors Range for the Wheel
+  void setWheelColors()
+  {
+    wheelColors = generateHarmoniousColors(
+      currentColorScheme(),
+      count: 12, // Generate 12 harmonious colors
+    );
+
+    wheelColors.shuffle();
+
+    emit(AppChangeWheelColorsState());
+  }
   //--------------------------------------------------\\
 
   ///All Items

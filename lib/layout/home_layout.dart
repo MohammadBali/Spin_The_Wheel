@@ -36,6 +36,11 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
         //   snackBarBuilder(context: context, message: Localization.translate('db_success'));
         // }
 
+        // if(state is AppUpdateDatabaseSuccessState)
+        // {
+        //   snackBarBuilder(context: context, message: Localization.translate('updated'));
+        // }
+
         if(state is AppGetDatabaseErrorState)
         {
           snackBarBuilder(context: context, message: state.message);
@@ -46,10 +51,7 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
           snackBarBuilder(context: context, message: Localization.translate('success'));
         }
 
-        // if(state is AppUpdateDatabaseSuccessState)
-        // {
-        //   snackBarBuilder(context: context, message: Localization.translate('updated'));
-        // }
+
       },
       builder: (context,state)
       {
@@ -93,6 +95,17 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 18.0, vertical: 30.0),
               child: cubit.tabBarWidgets[cubit.tabBarIndex],
             ),
+
+            floatingActionButton: cubit.tabBarIndex==0
+              ?FloatingActionButton(
+                tooltip: 'Repaint',
+                onPressed: ()
+                {
+                  cubit.setWheelColors();
+                },
+                child: Icon(Icons.format_paint_outlined),
+            )
+              :null,
           ),
         );
       },

@@ -87,6 +87,8 @@ class AppSpinWheelErrorState extends AppStates{
 
 class AppSpinWheelNoMoreAttemptsState extends AppStates{}
 
+class AppChangeWheelColorsState extends AppStates{}
+
 //------------------------------------
 
 //ALTER ITEM

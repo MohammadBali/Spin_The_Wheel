@@ -5,6 +5,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
+import 'package:spinning_wheel/shared/components/app_components.dart';
 
 
 class Home extends StatefulWidget {
@@ -31,10 +32,16 @@ class _HomeState extends State<Home> {
   bool _isPlaying = false;
   final double _currentPlaybackSpeed = 1.0;
 
+
+
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
+
+    setState(() {
+      AppCubit.get(context).setWheelColors();
+    });
   }
 
   @override
@@ -54,6 +61,7 @@ class _HomeState extends State<Home> {
       _controller.add(AppCubit.get(context).getDependentRandomIndex());
     }
   }
+
 
   void playWheelSound() async {
     if (!_isPlaying)
@@ -212,7 +220,32 @@ class _HomeState extends State<Home> {
 
       animateFirst: false,
 
-      items: cubit.items!.items!.map((choice) => FortuneItem(child: Text(choice.label!, style: TextStyle(fontFamily: AppCubit.language == 'ar'? 'Cairo' : 'WithoutSans'),),),).toList(),
+      styleStrategy: AlternatingStyleStrategy(),
+
+      items: cubit.items!.items!.asMap().entries.map((element)
+      {
+        int index = element.key; // Get the index
+        var choice = element.value; // Get the item
+
+        // Select color based on index
+        Color fillColor = cubit.wheelColors[index % cubit.wheelColors.length];
+
+        return FortuneItem(
+          child: Text(
+              choice.label!,
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: AppCubit.language == 'ar'
+                    ?'Cairo'
+                    :'WithoutSans'
+              ),),
+          style: FortuneItemStyle(
+              color: fillColor,
+              textStyle: generateTextStyle(fillColor)
+            ),
+
+        );
+      },).toList(),
     );
   }
 
