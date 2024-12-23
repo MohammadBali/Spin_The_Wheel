@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:hexcolor/hexcolor.dart';
 import 'package:spinning_wheel/shared/components/constants.dart';
 
 class ItemsModel
@@ -50,6 +53,7 @@ class ItemModel
   num? probability; //probability of occurring
   ItemType? type;
   num? remainingAttempts; //dependent probabilities
+  Color? color;
 
   ItemModel.fromJson(Map<String,dynamic>json)
   {
@@ -58,6 +62,7 @@ class ItemModel
     probability = json['probability'];
     type = ItemType.values.byName( json['type']);
     remainingAttempts = json['remainingAttempts'];
+    color = HexColor(json['color']);
   }
 
   ///If manual reinitializing was needed
@@ -67,7 +72,7 @@ class ItemModel
     remainingAttempts = (probability! * totalTrials).round();
   }
 
-  ItemModel({required this.id, required this.label, required this.probability, required this.type, required this.remainingAttempts});
+  ItemModel({required this.id, required this.label, required this.probability, required this.type, required this.remainingAttempts, required this.color});
 
   @override
   String toString() {

@@ -15,16 +15,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<Map<String, dynamic>> choices = [
-    {'label': 'Option 1', 'probability': 0},
-    {'label': 'Option 2', 'probability': 0},
-    {'label': 'Option 3', 'probability': 1},
-  ];
 
   final StreamController<int> _controller = StreamController<int>.broadcast();
 
   Stream<int> get myStream => _controller.stream;
-
+  bool _isSpinning = false; // Track spinning state
 
   late AudioPlayer _audioPlayer;
   Timer? _speedTimer;
@@ -55,7 +50,10 @@ class _HomeState extends State<Home> {
   {
     if(! _isPlaying)
     {
-      print('ab');
+      setState(() {
+        _isSpinning = true; // Activate dimming
+      });
+
       playWheelSound(); // Start the sound when the wheel starts spinning
       _controller.add(AppCubit.get(context).getDependentRandomIndex());
     }
@@ -85,6 +83,7 @@ class _HomeState extends State<Home> {
 
       setState(() {
         _isPlaying = false;
+        _isSpinning = false; // Remove dimming
       });
     }
   }
@@ -119,125 +118,115 @@ class _HomeState extends State<Home> {
         builder: (context,state)
         {
           var cubit = AppCubit.get(context);
-          return OrientationBuilder(
-              builder: (context,orientation)
-              {
-                if(orientation == Orientation.portrait)
-                {
-                  return ConditionalBuilder(
-                    condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
-                    builder: (context)=>Column(
-                      children:
-                      [
-                        Text(
-                          Localization.translate('appBar_title_home'),
-                          style: headlineStyleBuilder(fontSize: 24, fontWeight: FontWeight.w500, color: currentColorScheme(context).secondary),
-                        ),
-
-                        const SizedBox(height: 20,),
-
-                        Center(
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height/ 2,
-                            width: MediaQuery.of(context).size.width /1.5,
-                            child: myWheel(cubit:cubit),
-                          ),
-                        ),
-
-                        const Spacer(),
-
-                        defaultButton(
-                          type: ButtonType.elevated,
-                          onPressed: spinWheel,
-                          message: Localization.translate('spin'),
-                        ),
-
-                      ],
+          return ConditionalBuilder(
+            condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
+            builder: (context)=>SafeArea(
+              child: Column(
+                children:
+                [
+                  GestureDetector(
+                    child: Text(
+                      Localization.translate('spin_win'),
+                      style: headlineStyleBuilder(fontSize: 24, fontWeight: FontWeight.w500, color: currentColorScheme(context).secondary),
                     ),
-                    fallback: (context)=>Center(child: defaultProgressIndicator(context: context)),
-                  );
-                }
-                else
-                {
-                  return ConditionalBuilder(
-                    condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
-                    builder: (context)=>Column(
-                      children:
-                      [
-                        Expanded(child: Center(child: myWheel(cubit:cubit))),
+                    onDoubleTap: ()
+                    {
+                      cubit.changeIsTabBarShown();
+                    },
+                  ),
 
-                        const SizedBox(height: 25,),
+                  const SizedBox(height: 15,),
 
-                        defaultButton(
-                          type: ButtonType.elevated,
-                          onPressed: spinWheel,
-                          message: Localization.translate('spin'),
-                        ),
-
-                      ],
+                  Expanded(
+                    child: Center(
+                      child: myWheel(cubit:cubit),
                     ),
-                    fallback: (context)=> Center(child: defaultProgressIndicator(context: context)),
-                  );
-                }
-              });
+                  ),
+
+                  // const Spacer(),
+                  //
+                  // defaultButton(
+                  //   type: ButtonType.elevated,
+                  //   onPressed: spinWheel,
+                  //   message: Localization.translate('spin'),
+                  // ),
+
+                ],
+              ),
+            ),
+            fallback: (context)=>Center(child: defaultProgressIndicator(context: context)),
+          );
         },
 
     );
   }
 
-  Widget myWheel({required AppCubit cubit, })
+  ///Wheel Settings
+  Widget myWheel({required AppCubit cubit,})
   {
-    return FortuneWheel(
-      selected: myStream,
+    return Center(
+      child: FortuneWheel(
+        selected: myStream,
 
-      duration: Duration(seconds: 6),
+        duration: Duration(seconds: 6),
 
-      onAnimationStart: () {
-        playWheelSound();
-      },
+        onAnimationStart: () {
+          playWheelSound();
+        },
 
-      onAnimationEnd: ()
-      {
-        stopWheelSound();
-        
-        _dialog(context: context, cubit: cubit);
-      },
+        onAnimationEnd: ()
+        {
+          stopWheelSound();
 
-      onFling: ()
-      {
-        spinWheel();
-      },
+          _dialog(context: context, cubit: cubit);
+        },
 
-      animateFirst: false,
+        onFling: ()
+        {
+          spinWheel();
+        },
 
-      styleStrategy: AlternatingStyleStrategy(),
+        animateFirst: false,
 
-      items: cubit.items!.items!.asMap().entries.map((element)
-      {
-        int index = element.key; // Get the index
-        var choice = element.value; // Get the item
+        styleStrategy: AlternatingStyleStrategy(),
 
-        // Select color based on index
-        Color fillColor = cubit.wheelColors[index % cubit.wheelColors.length];
+        onFocusItemChanged: (index)
+        {
+        },
 
-        return FortuneItem(
-          child: Text(
+        items: cubit.items!.items!.asMap().entries.map((element)
+        {
+          int index = element.key; // Get the index
+          var choice = element.value; // Get the item
+
+          // Select color based on index
+          Color fillColor = AppCubit.currentColorChoice == 'manual'
+              ?choice.color!
+              :cubit.wheelColors[index % cubit.wheelColors.length];
+
+          return FortuneItem(
+            child: Text(
               choice.label!,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               style: TextStyle(
-                fontSize: 16,
-                fontFamily: AppCubit.language == 'ar'
-                    ?'Cairo'
-                    :'WithoutSans'
-              ),),
-          style: FortuneItemStyle(
-              color: fillColor,
-              textStyle: generateTextStyle(fillColor)
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: AppCubit.language == 'ar'
+                      ?'Cairo'
+                      :'WithoutSans'
+              ),
+            ),
+            style: FortuneItemStyle(
+                color: fillColor,
+                textStyle: generateTextStyle(fillColor),
+                borderWidth: cubit.isDarkTheme? 3 : 2,
+                borderColor: Colors.black
             ),
 
-        );
-      },).toList(),
+          );
+        },).toList(),
+      ),
     );
   }
 
@@ -253,47 +242,36 @@ class _HomeState extends State<Home> {
           builder: (dialogContext)
           {
             return defaultAlertDialog(
-                context: dialogContext,
-                title: cubit.currentItem?.type == ItemType.win
-                    ?Localization.translate('result_title_winning')
-                    :cubit.currentItem?.type == ItemType.loose
-                        ?Localization.translate('result_title_loose')
-                        :Localization.translate('result_title_tie'),
+              context: dialogContext,
+              title: cubit.currentItem?.type == ItemType.win
+                  ?Localization.translate('result_title_winning')
+                  :cubit.currentItem?.type == ItemType.loose
+                      ?Localization.translate('result_title_loose')
+                      :Localization.translate('result_title_tie'),
 
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children:
-                    [
-                      Text(
-                        Localization.translate('spin_result'),
-                        style: textStyleBuilder(),
-                      ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children:
+                  [
+                    Text(
+                      Localization.translate('spin_result'),
+                      style: textStyleBuilder(),
+                    ),
 
-                      const SizedBox(height: 5,),
+                    const SizedBox(height: 5,),
 
-                      Text(
-                        cubit.currentItem?.label ?? '',
-                        style: textStyleBuilder(fontWeight: FontWeight.w500),
-                      ),
-
-                      const SizedBox(height: 5,),
-
-                      defaultButton(
-                        type: ButtonType.outlined,
-                        message: Localization.translate('exit'),
-                        onPressed: ()
-                        {
-                          Navigator.of(dialogContext).pop();
-                        }
-                      ),
-                    ],
-                  ),
+                    Text(
+                      cubit.currentItem?.label ?? '',
+                      style: textStyleBuilder(fontWeight: FontWeight.w600, fontSize: 24),
+                    ),
+                  ],
                 ),
+              ),
 
-                titleStyle: headlineStyleBuilder(fontWeight: FontWeight.w600, fontSize: 24)
+              titleStyle: headlineStyleBuilder(fontWeight: FontWeight.w600, fontSize: 22)
             );
           }
       );
@@ -326,4 +304,9 @@ class _HomeState extends State<Home> {
         break;
     }
   }
+
 }
+
+
+
+

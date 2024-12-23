@@ -60,8 +60,9 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
         return Directionality(
           textDirection: appDirectionality(),
           child: OrientationBuilder(builder: (context,orientation)=>Scaffold(
-            appBar: orientation== Orientation.portrait? AppBar(
+            appBar: (orientation== Orientation.portrait && cubit.isTabBarShown ==true) ? AppBar(
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+
               title:  Text(
                 Localization.translate('appBar_title_home'),
                 style: TextStyle(
@@ -85,9 +86,9 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
 
                     Tab(
                       icon: const Icon(Icons.settings_outlined),
-
                       text: Localization.translate('settings'),
                     ),
+
                   ]
               ),
             ) : null,

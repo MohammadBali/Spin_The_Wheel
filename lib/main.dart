@@ -19,7 +19,7 @@ Future<void> main() async
 
 
   AppCubit.currentColorChoice = CacheHelper.getData(key: 'currentColorChoice');
-  AppCubit.currentColorChoice??='rainbow_choices';
+  AppCubit.currentColorChoice??='manual';
 
   // Set the Initial Local; Language
   await Localization.load(Locale(AppCubit.language!));

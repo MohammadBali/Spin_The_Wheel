@@ -181,9 +181,11 @@ Widget defaultAlertDialog(
       required String title,
       required Widget content,
       TextStyle? titleStyle,
+      ShapeBorder? shape,
     })
 {
   return AlertDialog(
+    shape: shape,
     title: Text(
       title,
       textAlign: TextAlign.center,
@@ -327,10 +329,7 @@ PreferredSizeWidget defaultTabBar(
       tabs: tabs,
       physics: physics,
       isScrollable: isScrollable,
-
       onTap: onTap?? (index){AppCubit.get(context).changeTabBar(index);},
-
-
 )
     :TabBar.secondary(
       controller: controller,

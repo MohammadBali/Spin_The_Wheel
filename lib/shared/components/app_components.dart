@@ -85,3 +85,13 @@ TextStyle generateTextStyle(Color fillColor) {
     fontSize: 12, // Adjust font size as needed
   );
 }
+
+///Extracts The Hexadecimal Color From The Color
+String hexCodeExtractor(Color color)
+{
+  final hexA = (color.a * 255).round().toRadixString(16).padLeft(2, '0');
+  final hexR = (color.r * 255).round().toRadixString(16).padLeft(2, '0');
+  final hexG = (color.g * 255).round().toRadixString(16).padLeft(2, '0');
+  final hexB = (color.b * 255).round().toRadixString(16).padLeft(2, '0');
+  return '$hexA$hexR$hexG$hexB';
+}

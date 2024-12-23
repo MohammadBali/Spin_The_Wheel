@@ -182,11 +182,13 @@ class _AllItemsState extends State<AllItems> {
                     {
                       if(formKey.currentState!.validate())
                       {
+                        //Todo: Fix COLOR
                         cubit.insertIntoDatabase(
                           label: labelController.value.text,
                           type: ItemType.values.byName(type!),
                           probability: num.parse(probabilityController.value.text),
-                          remainingAttempts: (num.parse(probabilityController.value.text) * totalTrials).round()
+                          remainingAttempts: (num.parse(probabilityController.value.text) * totalTrials).round(),
+                          color: ''
                         );
 
                         labelController.value = TextEditingValue.empty;
@@ -240,13 +242,65 @@ class _AllItemsState extends State<AllItems> {
                 type: ButtonType.text,
                 onPressed: ()
                 {
-                  cubit.deleteDatabase(id: item!.id!);
+                  _deleteDialog(context: context, item: item!, cubit: cubit);
                 }
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+
+
+  void _deleteDialog({required BuildContext context, required ItemModel item, required AppCubit cubit,})
+  {
+    showDialog(
+        context: context,
+        builder: (dialogContext)
+        {
+          return defaultAlertDialog(
+            context: dialogContext,
+            title: Localization.translate('delete_item'),
+            content: Directionality(
+              textDirection: appDirectionality(),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children:
+                  [
+                    Text(Localization.translate('delete_item_secondary')),
+
+                    const SizedBox(height: 5,),
+
+                    Row(
+                      children:
+                      [
+                        TextButton(
+                            onPressed: ()
+                            {
+                              cubit.deleteDatabase(id: item.id!);
+                              Navigator.of(dialogContext).pop(true);
+                            },
+                            child: Text(Localization.translate('exit_app_yes'))
+                        ),
+
+                        const Spacer(),
+
+                        TextButton(
+                          onPressed: ()=> Navigator.of(dialogContext).pop(false),
+                          child: Text(Localization.translate('exit_app_no')),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
     );
   }
 }

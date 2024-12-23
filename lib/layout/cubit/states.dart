@@ -10,6 +10,8 @@ class AppChangeLanguageState extends AppStates{}
 
 class AppSetDefaultItems extends AppStates{}
 
+class AppChangeTabBarShownState extends AppStates{}
+
 //------------------------------------
 
 //DB CREATION

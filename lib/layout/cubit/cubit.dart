@@ -71,6 +71,17 @@ class AppCubit extends Cubit<AppStates>
   }
 
 
+  ///if the TabBar is Shown
+  bool isTabBarShown = true;
+
+  ///Sets if the TabBar is Shown
+  void changeIsTabBarShown()
+  {
+    isTabBarShown = !isTabBarShown;
+
+    emit(AppChangeTabBarShownState());
+  }
+
   //--------------------------------------------------\\
 
   //SPINNING WHEEL
@@ -147,8 +158,6 @@ class AppCubit extends Cubit<AppStates>
           item.remainingAttempts = (item.remainingAttempts!.toInt() - 1).clamp(0, totalRemaining);
           updateDatabase(id: item.id!, remainingAttempts: item.remainingAttempts);
 
-          print('Printing Chosen Item..., ${item.toString()}');
-
           emit(AppSpinWheelSuccessState());
           setCurrentItem(i);
           return i;
@@ -156,10 +165,10 @@ class AppCubit extends Cubit<AppStates>
       }
 
       throw Exception("Failed to select an item based on weights.");
-    } catch (e, stackTrace)
+    } catch (e)
     {
       debugPrint('ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}');
-      print(stackTrace);
+
       emit(AppSpinWheelErrorState(message: 'ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}'));
     }
     return -1;
@@ -204,7 +213,7 @@ class AppCubit extends Cubit<AppStates>
   }
 
   ///List of Color Choices
-  List<String> colorChoices=['rainbow_choices', 'color_scheme_choices'];
+  List<String> colorChoices=['rainbow_choices', 'color_scheme_choices', 'manual'];
 
   ///Current Color Choice; aka rainbow Choice
   static String? currentColorChoice;
@@ -240,7 +249,7 @@ class AppCubit extends Cubit<AppStates>
       {
         debugPrint('Database has been created...');
         await database.execute(
-            'CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, label TEXT, probability INTEGER, type TEXT, remainingAttempts INTEGER)'
+            'CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, label TEXT, probability INTEGER, type TEXT, remainingAttempts INTEGER, color TEXT)'
         ).then((value)
         async {
           debugPrint('Table items has been created.');
@@ -250,7 +259,7 @@ class AppCubit extends Cubit<AppStates>
             await database.transaction((txn) async {
               await txn
                   .rawInsert(
-                  'INSERT INTO items(label, probability, type, remainingAttempts) VALUES("${item.label}", "${item.probability}", "${item.type?.name}", "${item.remainingAttempts}")')
+                  'INSERT INTO items(label, probability, type, remainingAttempts, color) VALUES("${item.label}", "${item.probability}", "${item.type?.name}", "${item.remainingAttempts}", "${hexCodeExtractor(item.color!)}")')
                   .then((value) {
                 debugPrint('$value has been Inserted successfully');
                 emit(AppInsertDatabaseSuccessState());
@@ -308,6 +317,7 @@ class AppCubit extends Cubit<AppStates>
     required num probability,
     required ItemType type,
     required num remainingAttempts,
+    required String color,
   }) async
   {
     emit(AppInsertDatabaseLoadingState());
@@ -315,7 +325,7 @@ class AppCubit extends Cubit<AppStates>
     await database?.transaction((txn) async {
       await txn
           .rawInsert(
-          'INSERT INTO items(label, probability, type, remainingAttempts) VALUES("$label", "$probability", "${type.name}", "$remainingAttempts")')
+          'INSERT INTO items(label, probability, type, remainingAttempts, color) VALUES("$label", "$probability", "${type.name}", "$remainingAttempts", "$color")')
           .then((value) {
         debugPrint('$value has been Inserted successfully');
         emit(AppInsertDatabaseSuccessState());
@@ -331,8 +341,7 @@ class AppCubit extends Cubit<AppStates>
   }
 
 
-//Todo:Set all occurring types
-  void updateDatabase({ItemType? type, String? label, num? probability, num? remainingAttempts, required int id}) async
+  void updateDatabase({ItemType? type, String? label, num? probability, num? remainingAttempts, String? color, required int id}) async
   {
     emit(AppUpdateDatabaseLoadingState());
 
@@ -341,6 +350,7 @@ class AppCubit extends Cubit<AppStates>
       if(label!=null) 'label':label,
       if(probability!=null) 'probability':probability,
       if(remainingAttempts!=null) 'remainingAttempts':remainingAttempts,
+      if(color!=null) 'color':color,
     };
     database!.update('items',values, where: 'id = ?', whereArgs: [id]).then((value)
     {
@@ -382,7 +392,10 @@ class AppCubit extends Cubit<AppStates>
   ///Alter an item
   void alterItem(ItemModel myItem)
   {
-    updateDatabase(id: myItem.id!, label: myItem.label, type: myItem.type, probability: myItem.probability, remainingAttempts: myItem.remainingAttempts);
+    updateDatabase(
+        id: myItem.id!, label: myItem.label, type: myItem.type,
+        probability: myItem.probability, remainingAttempts: myItem.remainingAttempts,
+        color: hexCodeExtractor(myItem.color!));
 
     for (var item in items?.items ?? [])
     {

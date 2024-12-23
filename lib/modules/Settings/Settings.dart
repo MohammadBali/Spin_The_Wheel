@@ -14,7 +14,7 @@ class _SettingsState extends State<Settings> {
 
   String currentLanguage= AppCubit.language??='ar';
 
-  String currentColorChoice = AppCubit.currentColorChoice??='rainbow_choices';
+  String currentColorChoice = AppCubit.currentColorChoice??='manual';
 
   @override
   Widget build(BuildContext context)

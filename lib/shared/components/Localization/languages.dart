@@ -100,6 +100,8 @@ const Map<String,String> en={
 
   'rainbow_choices':'Rainbow Colors',
 
+  'manual':'Manual',
+
   'color_scheme_choices':'From Current Scheme',
 
   //--------------------------------------------------------------------\\
@@ -109,6 +111,10 @@ const Map<String,String> en={
   'item_details':'Item Details',
 
   'item_probability':'Item Probability',
+
+  'item_color':'Item Color',
+
+  'pick_color':'Pick a Color',
 
   'in_100':'(in 100)',
 
@@ -121,6 +127,10 @@ const Map<String,String> en={
   'prop_not_a_number':'Probability Should be a Number',
 
   'new_item':'Add a New Item!',
+
+  'delete_item':'Delete an Item',
+
+  'delete_item_secondary':'Do you want to delete this item?',
 
   'win':'Win',
 
@@ -163,7 +173,7 @@ const Map<String,String> ar={
   'edit':'تعديل',
   'delete':'حذف',
 
-  'spin_win':'أدر وأربح',
+  'spin_win':'دوري وربحي!',
 
   'error':'حدث خطأ أثناء العملية',
   'exit':'الخروج',
@@ -253,6 +263,8 @@ const Map<String,String> ar={
 
   'rainbow_choices':'ألوان قزحية',
 
+  'manual':'يدوي',
+
   'color_scheme_choices':'من مخطط الألوان الحالي',
 
 
@@ -265,6 +277,10 @@ const Map<String,String> ar={
 
   'item_probability':'احتمالية العنصر',
 
+  'item_color':'لون العنصر',
+
+  'pick_color':'اختر لوناً',
+
   'in_100':'(في 100)',
 
   'item_name':'اسم العنصر',
@@ -276,6 +292,10 @@ const Map<String,String> ar={
   'prop_not_a_number':'الاحتمالية يحب أن تكون رقماً',
 
   'new_item':'أضف عنصراً جديداً',
+
+  'delete_item':'حذف عنصر',
+
+  'delete_item_secondary':'هل تريد حذف هذا العنصر؟',
 
   'win':'ربح',
 
