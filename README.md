@@ -5,7 +5,7 @@ This Flutter project implements a customizable spinning wheel feature, ideal for
 ## Features
 
 - **Spinning Wheel**: A visually appealing wheel of fortune that selects items randomly.
-- **Weighted Probability**: Items on the wheel can have weighted probabilities, allowing some options to appear more frequently than others.
+- **Weighted Probability**: Items on the wheel can have weighted probabilities, allowing some options to appear more frequently than others in a dependent trial.
 - **Responsive Design**: Supports both portrait and landscape orientations.
 - **Audio Integration**: Plays a dynamic spinning sound that slows down as the wheel stops.
 - **Localizations**: Multi-language support for UI elements.

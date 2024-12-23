@@ -61,7 +61,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-
   void playWheelSound() async {
     if (!_isPlaying)
     {
@@ -162,28 +161,20 @@ class _HomeState extends State<Home> {
                 {
                   return ConditionalBuilder(
                     condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
-                    builder: (context)=>SingleChildScrollView(
-                      child: Column(
-                        children:
-                        [
-                          Center(
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height/ 2,
-                              width: MediaQuery.of(context).size.width /1.2,
-                              child: myWheel(cubit:cubit),
-                            ),
-                          ),
+                    builder: (context)=>Column(
+                      children:
+                      [
+                        Expanded(child: Center(child: myWheel(cubit:cubit))),
 
-                          const SizedBox(height: 25,),
+                        const SizedBox(height: 25,),
 
-                          defaultButton(
-                            type: ButtonType.elevated,
-                            onPressed: spinWheel,
-                            message: Localization.translate('spin'),
-                          ),
+                        defaultButton(
+                          type: ButtonType.elevated,
+                          onPressed: spinWheel,
+                          message: Localization.translate('spin'),
+                        ),
 
-                        ],
-                      ),
+                      ],
                     ),
                     fallback: (context)=> Center(child: defaultProgressIndicator(context: context)),
                   );

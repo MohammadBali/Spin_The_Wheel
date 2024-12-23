@@ -53,13 +53,14 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
 
 
       },
+
       builder: (context,state)
       {
         var cubit = AppCubit.get(context);
         return Directionality(
           textDirection: appDirectionality(),
-          child: Scaffold(
-            appBar: AppBar(
+          child: OrientationBuilder(builder: (context,orientation)=>Scaffold(
+            appBar: orientation== Orientation.portrait? AppBar(
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               title:  Text(
                 Localization.translate('appBar_title_home'),
@@ -89,24 +90,24 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
                     ),
                   ]
               ),
-            ),
+            ) : null,
 
             body: Padding(
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 18.0, vertical: 30.0),
               child: cubit.tabBarWidgets[cubit.tabBarIndex],
             ),
 
-            floatingActionButton: cubit.tabBarIndex==0
-              ?FloatingActionButton(
-                tooltip: 'Repaint',
-                onPressed: ()
-                {
-                  cubit.setWheelColors();
-                },
-                child: Icon(Icons.format_paint_outlined),
+            floatingActionButton: cubit.tabBarIndex==0 && cubit.shuffleColors==true
+                ?FloatingActionButton(
+              tooltip: 'Repaint',
+              onPressed: ()
+              {
+                cubit.setWheelColors();
+              },
+              child: Icon(Icons.format_paint_outlined),
             )
-              :null,
-          ),
+                :null,
+          )),
         );
       },
 
