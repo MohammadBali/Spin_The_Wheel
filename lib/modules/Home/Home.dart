@@ -6,7 +6,6 @@ import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
 import 'package:spinning_wheel/shared/components/app_components.dart';
 
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -26,8 +25,6 @@ class _HomeState extends State<Home> {
   bool _isPlaying = false;
   final double _currentPlaybackSpeed = 1.0;
 
-
-
   @override
   void initState() {
     super.initState();
@@ -46,6 +43,7 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
+  ///Triggers tha Spinning Action
   void spinWheel()
   {
     if(! _isPlaying)
@@ -59,6 +57,7 @@ class _HomeState extends State<Home> {
     }
   }
 
+  ///Start Spinning Sound
   void playWheelSound() async {
     if (!_isPlaying)
     {
@@ -75,6 +74,7 @@ class _HomeState extends State<Home> {
     }
   }
 
+  ///Stop Spinning Sound
   void stopWheelSound() async {
     if (_isPlaying)
     {
@@ -87,23 +87,6 @@ class _HomeState extends State<Home> {
       });
     }
   }
-
-  // void simulateSlowingDown() {
-  //   const interval = Duration(milliseconds: 200); // Adjust speed every 200ms
-  //   const speedReductionRate = 0.05; // Decrease speed by 0.05x each interval
-  //   const minSpeed = 0.3; // Minimum playback speed
-  //
-  //   _speedTimer = Timer.periodic(interval, (timer) {
-  //     _currentPlaybackSpeed -= speedReductionRate;
-  //
-  //     if (_currentPlaybackSpeed <= minSpeed) {
-  //       _currentPlaybackSpeed = minSpeed;
-  //       timer.cancel(); // Stop reducing speed once the minimum is reached
-  //     }
-  //
-  //     _audioPlayer.setPlaybackRate(_currentPlaybackSpeed);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -164,70 +147,103 @@ class _HomeState extends State<Home> {
   ///Wheel Settings
   Widget myWheel({required AppCubit cubit,})
   {
-    return Center(
-      child: FortuneWheel(
-        selected: myStream,
+    return LayoutBuilder(builder: (context,constraints)
+    {
+      double maxSize = constraints.maxWidth < constraints.maxHeight
+          ? constraints.maxWidth
+          : constraints.maxHeight; // Take the smaller dimension for responsiveness
 
-        duration: Duration(seconds: 6),
+      // Calculate sizes dynamically based on available space
+      double wheelSize = maxSize * 0.9; // 90% of the available width
+      double borderSize = wheelSize * 1.3; // Border image slightly larger than the wheel
 
-        onAnimationStart: () {
-          playWheelSound();
-        },
 
-        onAnimationEnd: ()
-        {
-          stopWheelSound();
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          IgnorePointer(
+              child: SizedBox(
+                width: borderSize,
+                height: borderSize,
+                child: Image(
+                  image: AssetImage('assets/images/others/border4.png'),
+                  color: cubit.isDarkTheme? Colors.white : Colors.black,
+                  filterQuality: FilterQuality.high,
+                ),
+              )
+          ),
 
-          _dialog(context: context, cubit: cubit);
-        },
+          SizedBox(
+            width: wheelSize,
+            height: wheelSize,
+            child: FortuneWheel(
+              selected: myStream,
 
-        onFling: ()
-        {
-          spinWheel();
-        },
+              duration: Duration(seconds: 6),
 
-        animateFirst: false,
+              onAnimationStart: () {
+                playWheelSound();
+              },
 
-        styleStrategy: AlternatingStyleStrategy(),
+              onAnimationEnd: ()
+              {
+                stopWheelSound();
 
-        onFocusItemChanged: (index)
-        {
-        },
+                _dialog(context: context, cubit: cubit);
+              },
 
-        items: cubit.items!.items!.asMap().entries.map((element)
-        {
-          int index = element.key; // Get the index
-          var choice = element.value; // Get the item
+              onFling: ()
+              {
+                spinWheel();
+              },
 
-          // Select color based on index
-          Color fillColor = AppCubit.currentColorChoice == 'manual'
-              ?choice.color!
-              :cubit.wheelColors[index % cubit.wheelColors.length];
+              animateFirst: false,
 
-          return FortuneItem(
-            child: Text(
-              choice.label!,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: AppCubit.language == 'ar'
-                      ?'Cairo'
-                      :'WithoutSans'
-              ),
+              styleStrategy: AlternatingStyleStrategy(),
+
+              onFocusItemChanged: (index)
+              {
+                // print(cubit.items?.items?[index].label);
+              },
+
+              items: cubit.items!.items!.asMap().entries.map((element)
+              {
+                int index = element.key; // Get the index
+                var choice = element.value; // Get the item
+
+                // Select color based on index
+                Color fillColor = AppCubit.currentColorChoice == 'manual'
+                    ?choice.color!
+                    :cubit.wheelColors[index % cubit.wheelColors.length];
+
+                return FortuneItem(
+                  child: Text(
+                    choice.label!,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: AppCubit.language == 'ar'
+                            ?'Cairo'
+                            :'WithoutSans'
+                    ),
+                  ),
+                  style: FortuneItemStyle(
+                      color: fillColor,
+                      textStyle: generateTextStyle(fillColor),
+                      borderWidth: cubit.isDarkTheme? 3 : 2,
+                      borderColor: Colors.black
+                  ),
+                );
+              },).toList(),
+
+              // alignment: Alignment.center,
             ),
-            style: FortuneItemStyle(
-                color: fillColor,
-                textStyle: generateTextStyle(fillColor),
-                borderWidth: cubit.isDarkTheme? 3 : 2,
-                borderColor: Colors.black
-            ),
-
-          );
-        },).toList(),
-      ),
-    );
+          ),
+        ],
+      );
+    });
   }
 
   ///Show Dialog with the result

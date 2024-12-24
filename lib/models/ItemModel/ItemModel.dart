@@ -14,7 +14,7 @@ class ItemsModel
 
   ItemsModel.fromJson(List<Map<String,dynamic>>json)
   {
-    for (var item in json ?? [])
+    for (var item in json)
     {
       ItemModel i = ItemModel.fromJson(item);
 
