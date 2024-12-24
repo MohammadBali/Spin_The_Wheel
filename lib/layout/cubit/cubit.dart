@@ -215,7 +215,10 @@ class AppCubit extends Cubit<AppStates>
   ///List of Color Choices
   List<String> colorChoices=['rainbow_choices', 'color_scheme_choices', 'manual'];
 
-  ///Current Color Choice; aka rainbow Choice
+  ///Current Color Choice
+  ///[rainbow_choices] Colors are from the main 12 Colors
+  ///[color_scheme_choices] Colors are derived from the current Mode; Light or Dark
+  ///[manual] Colors that are assigned
   static String? currentColorChoice;
 
   ///Set The Choice
@@ -303,6 +306,7 @@ class AppCubit extends Cubit<AppStates>
     }).catchError((error, stackTrace)
     {
       debugPrint('ERROR WHILE GETTING DATABASE..., ${error.toString()}');
+      print(stackTrace);
       emit(AppGetDatabaseErrorState(message: 'ERROR WHILE GETTING DATABASE..., ${error.toString()}'));
     });
   }

@@ -1,4 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/modules/Items/Edit_Items.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
@@ -17,7 +19,25 @@ class _AllItemsState extends State<AllItems> {
 
   TextEditingController labelController = TextEditingController();
   TextEditingController probabilityController = TextEditingController();
+  TextEditingController colorController = TextEditingController();
+
   String? type;
+  late Color currentColor;
+
+  @override
+  void initState() {
+    super.initState();
+
+    currentColor = AppCubit.get(context).currentColorScheme().primary;
+  }
+
+  @override
+  void dispose() {
+    probabilityController.dispose();
+    labelController.dispose();
+    colorController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +158,36 @@ class _AllItemsState extends State<AllItems> {
                               const SizedBox(height: 20,),
 
                               Text(
+                                Localization.translate('item_color'),
+                                style: textStyleBuilder(),
+                              ),
+
+                              const SizedBox(height: 10,),
+
+                              defaultTextFormField(
+                                  controller: colorController,
+                                  readOnly: true,
+                                  keyboard: TextInputType.text,
+                                  label: Localization.translate('item_color'),
+                                  prefix: Icons.color_lens_outlined,
+                                  validate: (value)
+                                  {
+                                    if(value==null || value.isEmpty)
+                                    {
+                                      return Localization.translate('empty_value');
+                                    }
+                                    return null;
+                                  },
+
+                                  onTap: ()
+                                  {
+                                    _colorDialog(context);
+                                  }
+                              ),
+
+                              const SizedBox(height: 10,),
+
+                              Text(
                                 Localization.translate('item_type'),
                                 style: textStyleBuilder(),
                               ),
@@ -182,13 +232,12 @@ class _AllItemsState extends State<AllItems> {
                     {
                       if(formKey.currentState!.validate())
                       {
-                        //Todo: Fix COLOR
                         cubit.insertIntoDatabase(
                           label: labelController.value.text,
                           type: ItemType.values.byName(type!),
                           probability: num.parse(probabilityController.value.text),
                           remainingAttempts: (num.parse(probabilityController.value.text) * totalTrials).round(),
-                          color: ''
+                          color: hexCodeExtractor(currentColor),
                         );
 
                         labelController.value = TextEditingValue.empty;
@@ -203,7 +252,9 @@ class _AllItemsState extends State<AllItems> {
               },
               tooltip: 'Add Item',
               child: const Icon(Icons.add),
+
             ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
           ),
         );
       },
@@ -253,6 +304,7 @@ class _AllItemsState extends State<AllItems> {
   }
 
 
+  ///Delete an Item Dialog
   void _deleteDialog({required BuildContext context, required ItemModel item, required AppCubit cubit,})
   {
     showDialog(
@@ -297,6 +349,52 @@ class _AllItemsState extends State<AllItems> {
                     ),
                   ],
                 ),
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  ///Color Dialog to Choose a Color
+  void _colorDialog(BuildContext context)
+  {
+    showDialog(
+        context: context,
+        builder: (dialogContext)
+        {
+          return defaultAlertDialog(
+            context: dialogContext,
+            title: Localization.translate('pick_color'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ColorPicker(
+                    pickerColor: currentColor,
+                    onColorChanged: (Color c)
+                    {
+                      setState(() {
+                        currentColor = c;
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: 5,),
+
+                  defaultButton(
+                    message: Localization.translate('submit_button'),
+                    type: ButtonType.elevated,
+                    onPressed: ()
+                    {
+                      setState(() {
+                        colorController.value = TextEditingValue(text: hexCodeExtractor(currentColor));
+                      });
+
+                      Navigator.of(dialogContext).pop();
+                    },
+                  ),
+                ],
               ),
             ),
           );

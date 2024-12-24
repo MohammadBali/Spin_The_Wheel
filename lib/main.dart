@@ -17,7 +17,7 @@ Future<void> main() async
   AppCubit.language= CacheHelper.getData(key: 'language');
   AppCubit.language ??= 'ar';
 
-
+  //Set The Color Scheme
   AppCubit.currentColorChoice = CacheHelper.getData(key: 'currentColorChoice');
   AppCubit.currentColorChoice??='manual';
 

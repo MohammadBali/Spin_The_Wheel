@@ -221,6 +221,7 @@ class _EditItemsState extends State<EditItems> {
     );
   }
 
+  ///Color Dialog to Choose a Color
   void _colorDialog(BuildContext context)
   {
     showDialog(
