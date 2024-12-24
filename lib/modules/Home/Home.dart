@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
@@ -19,16 +21,25 @@ class _HomeState extends State<Home> {
 
   Stream<int> get myStream => _controller.stream;
   bool _isSpinning = false; // Track spinning state
-
   late AudioPlayer _audioPlayer;
+
   Timer? _speedTimer;
   bool _isPlaying = false;
   final double _currentPlaybackSpeed = 1.0;
+
+
+  late ConfettiController _controllerCenterRight;
+  late ConfettiController _controllerCenterLeft;
+  late ConfettiController _controllerCenter;
 
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
+
+    _controllerCenterRight = ConfettiController(duration: const Duration(seconds: 10));
+    _controllerCenterLeft = ConfettiController(duration: const Duration(seconds: 10));
+    _controllerCenter = ConfettiController(duration: const Duration(seconds: 10));
 
     setState(() {
       AppCubit.get(context).setWheelColors();
@@ -40,6 +51,10 @@ class _HomeState extends State<Home> {
     _controller.close();
     _audioPlayer.dispose();
     _speedTimer?.cancel();
+
+    _controllerCenterRight.dispose();
+    _controllerCenterLeft.dispose();
+    _controllerCenter.dispose();
     super.dispose();
   }
 
@@ -241,6 +256,47 @@ class _HomeState extends State<Home> {
               // alignment: Alignment.center,
             ),
           ),
+
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _controllerCenter,
+              blastDirectionality: BlastDirectionality.explosive, // don't specify a direction, blast randomly
+              shouldLoop: true, // start again as soon as the animation is finished
+              createParticlePath: drawStar, // define a custom shape/path.
+            ),
+          ),
+
+          Align(
+            alignment: Alignment.centerLeft,
+            child: ConfettiWidget(
+              confettiController: _controllerCenterLeft,
+              blastDirection: 0, // radial value - RIGHT
+              emissionFrequency: 0.6,
+              // set the minimum potential size for the confetti (width, height)
+              minimumSize: const Size(10, 10),
+              // set the maximum potential size for the confetti (width, height)
+              maximumSize: const Size(50, 50),
+              numberOfParticles: 1,
+              gravity: 0.1,
+              shouldLoop: true,
+            ),
+          ),
+
+          Align(
+            alignment: Alignment.centerRight,
+            child: ConfettiWidget(
+              confettiController: _controllerCenterRight,
+              blastDirection: pi, // radial value - LEFT
+              particleDrag: 0.05, // apply drag to the confetti
+              emissionFrequency: 0.05, // how often it should emit
+              numberOfParticles: 20, // number of particles to emit
+              gravity: 0.05, // gravity - or fall speed
+              shouldLoop: true,
+              strokeWidth: 1,
+              strokeColor: Colors.white,
+            ),
+          ),
         ],
       );
     });
@@ -287,10 +343,18 @@ class _HomeState extends State<Home> {
                 ),
               ),
 
-              titleStyle: headlineStyleBuilder(fontWeight: FontWeight.w600, fontSize: 22)
+              titleStyle: headlineStyleBuilder(fontWeight: FontWeight.w600, fontSize: 22),
+
+
             );
-          }
-      );
+          },
+      ).then((_)
+      {
+        // Dialog dismissed callback
+        _controllerCenterLeft.stop();
+        _controllerCenterRight.stop();
+        _controllerCenter.stop();
+      });
     }
 
     else
@@ -309,6 +373,10 @@ class _HomeState extends State<Home> {
     {
 
       case ItemType.win:
+        _controllerCenterLeft.play();
+        _controllerCenterRight.play();
+        _controllerCenter.play();
+
         _audioPlayer.play(AssetSource('audio/win.mp3'));
         break;
 
