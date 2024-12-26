@@ -168,12 +168,12 @@ const Map<String,String> ar={
   'success':'تمت بنجاح...',
   'refreshed':'تم التحديث...',
 
-  'updated':'تم تحديث البيانات...',
+  'updated':'تم تحديث قاعدة البيانات...',
 
   'edit':'تعديل',
   'delete':'حذف',
 
-  'spin_win':'دوري وربحي!',
+  'spin_win':'دوري و ربحي!',
 
   'error':'حدث خطأ أثناء العملية',
   'exit':'الخروج',
@@ -185,7 +185,7 @@ const Map<String,String> ar={
 
   //App Bar
 
-  'appBar_title_home':'أدر وأربح',
+  'appBar_title_home':'دوري و ربحي',
 
   //Login:
 
@@ -224,7 +224,7 @@ const Map<String,String> ar={
 
   'home':'الرئيسية',
 
-  'spin':'أدر الآن!',
+  'spin':'دور!',
 
   'settings':'الإعدادات',
 

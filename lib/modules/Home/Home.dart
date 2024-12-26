@@ -237,8 +237,10 @@ class _HomeState extends State<Home> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        fontWeight: AppCubit.language == 'ar'
+                            ?FontWeight.w600
+                            :null,
                         fontFamily: AppCubit.language == 'ar'
                             ?'Cairo'
                             :'WithoutSans'

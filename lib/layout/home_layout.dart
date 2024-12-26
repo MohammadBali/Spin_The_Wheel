@@ -36,10 +36,10 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
         //   snackBarBuilder(context: context, message: Localization.translate('db_success'));
         // }
 
-        // if(state is AppUpdateDatabaseSuccessState)
-        // {
-        //   snackBarBuilder(context: context, message: Localization.translate('updated'));
-        // }
+        if(state is AppUpdateDatabaseSuccessState)
+        {
+          snackBarBuilder(context: context, message: Localization.translate('updated'));
+        }
 
         if(state is AppGetDatabaseErrorState)
         {
