@@ -38,7 +38,10 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
 
         if(state is AppUpdateDatabaseSuccessState)
         {
-          snackBarBuilder(context: context, message: Localization.translate('updated'));
+          if(state.showSnack == true)
+          {
+            snackBarBuilder(context: context, message: Localization.translate('updated'));
+          }
         }
 
         if(state is AppGetDatabaseErrorState)
@@ -108,6 +111,7 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
               child: Icon(Icons.format_paint_outlined),
             )
                 :null,
+            //backgroundColor: darkColorScheme.primary,
           )),
         );
       },

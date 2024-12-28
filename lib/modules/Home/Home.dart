@@ -124,8 +124,13 @@ class _HomeState extends State<Home> {
                 [
                   GestureDetector(
                     child: Text(
-                      Localization.translate('spin_win'),
-                      style: headlineStyleBuilder(fontSize: 24, fontWeight: FontWeight.w500, color: currentColorScheme(context).secondary),
+                      Localization.translate('home_title'),
+                      style: headlineStyleBuilder(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'WithoutSans',
+                          color: currentColorScheme(context).secondary
+                      ),
                     ),
                     onDoubleTap: ()
                     {
@@ -133,12 +138,23 @@ class _HomeState extends State<Home> {
                     },
                   ),
 
-                  const SizedBox(height: 15,),
+                  const SizedBox(height: 5,),
 
                   Expanded(
                     child: Center(
                       child: myWheel(cubit:cubit),
                     ),
+                  ),
+
+                  Text(
+                    Localization.translate('home_secondary'),
+                    style: headlineStyleBuilder(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
+                        color: currentColorScheme(context).secondary
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                   ),
 
                   // const Spacer(),
@@ -234,6 +250,7 @@ class _HomeState extends State<Home> {
                 return FortuneItem(
                   child: Text(
                     choice.label!,
+                    textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     style: TextStyle(
@@ -255,7 +272,8 @@ class _HomeState extends State<Home> {
                 );
               },).toList(),
 
-              // alignment: Alignment.center,
+              hapticImpact: HapticImpact.heavy,
+
             ),
           ),
 

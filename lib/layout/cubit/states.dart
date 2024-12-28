@@ -57,7 +57,10 @@ class AppUpdateDatabaseErrorState extends AppStates{
   AppUpdateDatabaseErrorState({required this.message});
 }
 
-class AppUpdateDatabaseSuccessState extends AppStates{}
+class AppUpdateDatabaseSuccessState extends AppStates{
+  bool? showSnack=false;
+  AppUpdateDatabaseSuccessState({this.showSnack});
+}
 
 //DELETE FROM DB
 

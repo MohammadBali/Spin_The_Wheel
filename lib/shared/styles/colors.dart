@@ -7,11 +7,13 @@ Color seedColor = HexColor('5CE1E6');//Colors.indigoAccent;
 final ColorScheme lightColorScheme = ColorScheme.fromSeed(
   seedColor: seedColor,
   brightness: Brightness.light,
+  // surface: HexColor('5CE1E6'),
 );
 
 final ColorScheme darkColorScheme = ColorScheme.fromSeed(
   seedColor: seedColor,
   brightness: Brightness.dark,
+  // surface: HexColor('5CE1E6'),
 );
 
 

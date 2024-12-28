@@ -203,7 +203,7 @@ class _EditItemsState extends State<EditItems> {
                                 widget.item.probability = num.tryParse(probabilityController.value.text);
                                 widget.item.remainingAttempts =  (num.tryParse(probabilityController.value.text)! * totalTrials).round();
                                 widget.item.color = currentColor;
-                                cubit.alterItem(widget.item);
+                                cubit.alterItem(widget.item, showSnack: true);
                                 Navigator.of(context).pop();
                               }
                             }

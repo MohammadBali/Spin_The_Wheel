@@ -59,6 +59,10 @@ const Map<String,String> en={
 
   //HOME PAGE
 
+  'home_title':'NUA',
+
+  'home_secondary':'Share The Good Life',
+
   'result':'Result is:',
 
   'home':'Home',
@@ -160,7 +164,6 @@ const Map<String,String> en={
 const Map<String,String> ar={
 
   //Global
-  //Global
 
   'submit_button':'ثّبت',
   'upload_button':'ارفع',
@@ -219,6 +222,10 @@ const Map<String,String> ar={
   //----------------------------------------------------------------------\\
 
   //HOME PAGE
+
+  'home_title':'NUA',
+
+  'home_secondary':'Share The Good Life',
 
   'result':'النتيجة هي: ',
 

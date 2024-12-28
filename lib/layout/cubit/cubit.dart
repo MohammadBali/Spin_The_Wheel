@@ -345,7 +345,7 @@ class AppCubit extends Cubit<AppStates>
   }
 
 
-  void updateDatabase({ItemType? type, String? label, num? probability, num? remainingAttempts, String? color, required int id}) async
+  void updateDatabase({ItemType? type, String? label, num? probability, num? remainingAttempts, String? color, required int id, bool showSnack=false,}) async
   {
     emit(AppUpdateDatabaseLoadingState());
 
@@ -359,7 +359,7 @@ class AppCubit extends Cubit<AppStates>
     database!.update('items',values, where: 'id = ?', whereArgs: [id]).then((value)
     {
       getDatabase(database);
-      emit(AppUpdateDatabaseSuccessState());
+      emit(AppUpdateDatabaseSuccessState(showSnack: showSnack));
     }).catchError((error)
     {
       debugPrint('ERROR WHILE UPDATING DB..., ${error.toString()}');
@@ -394,12 +394,14 @@ class AppCubit extends Cubit<AppStates>
 
 
   ///Alter an item
-  void alterItem(ItemModel myItem)
+  void alterItem(ItemModel myItem, {bool showSnack =false})
   {
     updateDatabase(
         id: myItem.id!, label: myItem.label, type: myItem.type,
         probability: myItem.probability, remainingAttempts: myItem.remainingAttempts,
-        color: hexCodeExtractor(myItem.color!));
+        color: hexCodeExtractor(myItem.color!),
+        showSnack: showSnack
+    );
 
     for (var item in items?.items ?? [])
     {
