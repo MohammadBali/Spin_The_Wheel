@@ -378,6 +378,8 @@ class _AllItemsState extends State<AllItems> {
                         currentColor = c;
                       });
                     },
+                    labelTypes: [ColorLabelType.rgb],
+
                   ),
 
                   const SizedBox(height: 5,),

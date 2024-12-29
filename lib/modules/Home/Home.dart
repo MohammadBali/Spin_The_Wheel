@@ -116,20 +116,40 @@ class _HomeState extends State<Home> {
         builder: (context,state)
         {
           var cubit = AppCubit.get(context);
-          return ConditionalBuilder(
+          return OrientationBuilder(builder: (context,orientation)=>ConditionalBuilder(
             condition: cubit.items !=null && cubit.items!.items!.isNotEmpty,
             builder: (context)=>SafeArea(
               child: Column(
                 children:
                 [
                   GestureDetector(
-                    child: Text(
-                      Localization.translate('home_title'),
-                      style: headlineStyleBuilder(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'WithoutSans',
-                          color: currentColorScheme(context).secondary
+                    child: ShaderMask(
+                      shaderCallback: (bounds) {
+                        return LinearGradient(
+                          colors: [
+                            currentColorScheme(context).primary,
+                            currentColorScheme(context).secondary,
+                            currentColorScheme(context).tertiary,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ).createShader(Offset.zero & bounds.size);
+                      },
+
+                      child: Text(
+                        Localization.translate('home_title'),
+                        style: headlineStyleBuilder(
+                          fontSize: orientation == Orientation.portrait
+                              ?Theme.of(context).textTheme.displayLarge!.fontSize!
+                              :Theme.of(context).textTheme.displayMedium!.fontSize!,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Poppins',
+                          //color: currentColorScheme(context).primary,
+                          decoration: TextDecoration.underline,
+                          textDecorationStyle: TextDecorationStyle.wavy,
+                          decorationColor: currentColorScheme(context).secondary,
+                          letterSpacing: 4,
+                        ),
                       ),
                     ),
                     onDoubleTap: ()
@@ -149,13 +169,19 @@ class _HomeState extends State<Home> {
                   Text(
                     Localization.translate('home_secondary'),
                     style: headlineStyleBuilder(
-                        fontSize: 28,
+                        fontSize: orientation == Orientation.portrait
+                            ?Theme.of(context).textTheme.headlineMedium!.fontSize!
+                            :Theme.of(context).textTheme.headlineSmall!.fontSize!,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'WithoutSans',
                         color: currentColorScheme(context).secondary
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
+
+                  if(orientation == Orientation.portrait && cubit.shuffleColors==true)
+                    const SizedBox(height: 40,),
 
                   // const Spacer(),
                   //
@@ -169,7 +195,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             fallback: (context)=>Center(child: defaultProgressIndicator(context: context)),
-          );
+          ));
         },
 
     );
@@ -186,22 +212,42 @@ class _HomeState extends State<Home> {
 
       // Calculate sizes dynamically based on available space
       double wheelSize = maxSize * 0.9; // 90% of the available width
-      double borderSize = wheelSize * 1.3; // Border image slightly larger than the wheel
+      double borderSize = wheelSize * 1.06; // Border image slightly larger than the wheel  was wheelSize * 1.3
 
 
       return Stack(
         alignment: Alignment.center,
         children: [
-          IgnorePointer(
-              child: SizedBox(
-                width: borderSize,
-                height: borderSize,
-                child: Image(
-                  image: AssetImage('assets/images/others/border4.png'),
-                  color: cubit.isDarkTheme? Colors.white : Colors.black,
-                  filterQuality: FilterQuality.high,
-                ),
-              )
+          // IgnorePointer(
+          //     child: SizedBox(
+          //       width: borderSize,
+          //       height: borderSize,
+          //       child: Image(
+          //         image: AssetImage('assets/images/others/border4.png'),
+          //         color: cubit.isDarkTheme? Colors.white : Colors.black,
+          //         filterQuality: FilterQuality.high,
+          //       ),
+          //     )
+          // ),
+
+          Container(
+            width: borderSize,
+            height: borderSize,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+
+              gradient: LinearGradient(
+                colors: [
+                  Colors.purple,
+                  Colors.pinkAccent,
+                  Colors.orangeAccent,
+                  Colors.yellow,
+                ],
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                stops: [0.2, 0.5, 0.8, 1.0], // Adjust color stops for smoother transition
+              ),
+            ),
           ),
 
           SizedBox(
@@ -266,7 +312,7 @@ class _HomeState extends State<Home> {
                   style: FortuneItemStyle(
                       color: fillColor,
                       textStyle: generateTextStyle(fillColor),
-                      borderWidth: cubit.isDarkTheme? 3 : 2,
+                      borderWidth: cubit.isDarkTheme? 2.5 : 2.5, // 2 : 3
                       borderColor: Colors.black
                   ),
                 );

@@ -243,6 +243,7 @@ class _EditItemsState extends State<EditItems> {
                         currentColor = c;
                       });
                     },
+                    labelTypes: [ColorLabelType.rgb],
                   ),
               
                   const SizedBox(height: 5,),

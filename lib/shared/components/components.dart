@@ -524,14 +524,22 @@ TextStyle headlineStyleBuilder({
   FontWeight fontWeight=FontWeight.w600,
   String? fontFamily,
   Color? color,
-  TextDecoration decoration = TextDecoration.none
+  TextDecoration decoration = TextDecoration.none,
+  TextDecorationStyle? textDecorationStyle,
+  Color? decorationColor,
+  double? letterSpacing,
+  FontStyle? fontStyle,
 
 })=>TextStyle(
   fontSize: fontSize,
   fontWeight: fontWeight,
   color:color ,
   decoration: decoration,
-  fontFamily: fontFamily
+  fontFamily: fontFamily,
+  decorationStyle: textDecorationStyle,
+  decorationColor: decorationColor,
+  letterSpacing: letterSpacing,
+  fontStyle: fontStyle,
 );
 
 //------------------------------------------------------------------------------------------\\

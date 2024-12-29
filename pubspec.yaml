@@ -126,5 +126,14 @@ flutter:
         - asset: assets/fonts/WithoutSans/WithoutSans-Thin.ttf
         - asset: assets/fonts/WithoutSans/WithoutSans-ThinItalic.ttf
 
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Bold.ttf
+        - asset: assets/fonts/Poppins/Poppins-Black.ttf
+        - asset: assets/fonts/Poppins/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins/Poppins-Thin.ttf
+
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
