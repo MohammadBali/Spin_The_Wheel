@@ -12,14 +12,12 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
   late TabController tabController;
   var formKey=GlobalKey<FormState>();
 
-
   @override
   void initState()
   {
     super.initState();
     tabController = TabController(length: AppCubit.get(context).tabBarWidgets.length, vsync: this);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +98,7 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 18.0, vertical: 30.0),
               child: cubit.tabBarWidgets[cubit.tabBarIndex],
             ),
+
 
             floatingActionButton: cubit.tabBarIndex==0 && cubit.shuffleColors==true
                 ?FloatingActionButton(

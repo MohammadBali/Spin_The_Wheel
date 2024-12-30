@@ -53,6 +53,8 @@ dependencies:
   hexcolor: ^3.0.1
   confetti: ^0.8.0
 
+  animated_text_kit: ^4.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
