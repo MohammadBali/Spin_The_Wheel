@@ -317,6 +317,7 @@ PreferredSizeWidget defaultTabBar(
   required List<Widget> tabs,
   required BuildContext context,
   TabController? controller,
+  Color? dividerColor,
 
   ScrollPhysics physics= const BouncingScrollPhysics(),
   void Function(int)? onTap,
@@ -330,12 +331,14 @@ PreferredSizeWidget defaultTabBar(
       physics: physics,
       isScrollable: isScrollable,
       onTap: onTap?? (index){AppCubit.get(context).changeTabBar(index);},
+      dividerColor: dividerColor,
 )
     :TabBar.secondary(
       controller: controller,
       tabs: tabs,
       physics: physics,
       isScrollable: isScrollable,
+      dividerColor: dividerColor,
       onTap: onTap?? (index){AppCubit.get(context).changeTabBar(index);},
 );
 

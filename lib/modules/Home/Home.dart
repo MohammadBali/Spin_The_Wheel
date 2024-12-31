@@ -138,12 +138,12 @@ class _HomeState extends State<Home> {
                                   ),
                                   colors:
                                   [
-                                    HexColor('88A7CC'),
-                                    HexColor('79BAD4'),
-                                    HexColor('6BCEDD'),
-                                    HexColor('5CE1E6'),
-                                    HexColor('A580BA'),
-                                    HexColor('9694C3'),
+                                    HexColor('FFFFFF'),
+                                    HexColor('F2E7F2'),
+                                    HexColor('E6CEE5'),
+                                    HexColor('D9B6D8'),
+                                    HexColor('CC9ECB'),
+                                    HexColor('C085BE'),
                                     HexColor('B36DB1'),
                                   ],
                                 speed: Duration(seconds: 3),
@@ -187,7 +187,7 @@ class _HomeState extends State<Home> {
                                       .fontSize!,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'WithoutSans',
-                                  color: currentColorScheme(context).secondary
+                                  color: currentColorScheme(context).primary
                               ),
                             ),
                           ]
@@ -323,9 +323,7 @@ class _HomeState extends State<Home> {
             child: ConfettiWidget(
               confettiController: _controllerCenter,
               blastDirectionality: BlastDirectionality.explosive,
-              // don't specify a direction, blast randomly
-              shouldLoop: true,
-              // start again as soon as the animation is finished
+              shouldLoop: false,
               createParticlePath: drawStar, // define a custom shape/path.
             ),
           ),
@@ -343,7 +341,7 @@ class _HomeState extends State<Home> {
               maximumSize: const Size(50, 50),
               numberOfParticles: 1,
               gravity: 0.1,
-              shouldLoop: true,
+              shouldLoop: false,
             ),
           ),
 
@@ -361,7 +359,7 @@ class _HomeState extends State<Home> {
               // number of particles to emit
               gravity: 0.05,
               // gravity - or fall speed
-              shouldLoop: true,
+              shouldLoop: false,
               strokeWidth: 1,
               strokeColor: Colors.white,
             ),

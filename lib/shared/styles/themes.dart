@@ -100,6 +100,10 @@ ThemeData lightTheme(context) => ThemeData(
     padding: WidgetStateProperty.all(const EdgeInsetsDirectional.symmetric(horizontal: 16)),
   ),
 
+  dividerTheme: DividerThemeData(
+      color: Colors.white,
+  ),
+
   textTheme: Theme.of(context).textTheme.apply(
     fontFamily: AppCubit.language == 'ar' ? 'Cairo' : null,
     bodyColor: lightColorScheme.onSurface, // Use onSurface for text
@@ -222,6 +226,9 @@ ThemeData darkTheme(context) => ThemeData(
     padding: WidgetStateProperty.all(const EdgeInsetsDirectional.symmetric(horizontal: 16)),
   ),
 
+  dividerTheme: DividerThemeData(
+    color: null,
+  ),
 
   textTheme: Theme.of(context).textTheme.apply(
     fontFamily: AppCubit.language == 'ar' ? 'Cairo' : null,

@@ -61,42 +61,60 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
         return Directionality(
           textDirection: appDirectionality(),
           child: OrientationBuilder(builder: (context,orientation)=>Scaffold(
-            appBar: (orientation== Orientation.portrait && cubit.isTabBarShown ==true) ? AppBar(
-              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            backgroundColor: cubit.isDarkTheme? currentColorScheme(context).surface : currentColorScheme(context).primaryContainer,
+            appBar: (orientation== Orientation.portrait && cubit.isTabBarShown ==true)
+                ? AppBar(
+                  title:  Text(
+                    Localization.translate('appBar_title_home'),
+                    style: TextStyle(
+                        fontFamily: AppCubit.language == 'en'
+                            ? 'WithoutSans'
+                            : 'Cairo'
+                    ),
+                  ),
+                  backgroundColor: cubit.isDarkTheme? currentColorScheme(context).surface : currentColorScheme(context).primaryContainer,
+                  bottom: defaultTabBar(
+                      context: context,
+                      controller: tabController,
+                      isPrimary: true,
+                      dividerColor: Colors.transparent,
+                      tabs:
+                      [
+                        Tab(
+                          icon: const Icon(Icons.home_outlined),
 
-              title:  Text(
-                Localization.translate('appBar_title_home'),
-                style: TextStyle(
-                    fontFamily: AppCubit.language == 'en'
-                        ? 'WithoutSans'
-                        : 'Cairo'
+                          text: Localization.translate('home'),
+                        ),
+
+                        Tab(
+                          icon: const Icon(Icons.settings_outlined),
+                          text: Localization.translate('settings'),
+                        ),
+
+                      ]
+                  ),
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(image: DecorationImage(
+                      image: AssetImage('assets/images/background/chinese.png',),
+                      fit: BoxFit.cover,
+                      opacity: 0.4,),
+                    ),
+                  )
+                )
+                : null,
+
+            body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/background/chinese.png',),
+                  fit: BoxFit.cover,
+                  opacity: 0.4
                 ),
               ),
-
-              bottom: defaultTabBar(
-                  context: context,
-                  controller: tabController,
-                  isPrimary: true,
-                  tabs:
-                  [
-                    Tab(
-                      icon: const Icon(Icons.home_outlined),
-
-                      text: Localization.translate('home'),
-                    ),
-
-                    Tab(
-                      icon: const Icon(Icons.settings_outlined),
-                      text: Localization.translate('settings'),
-                    ),
-
-                  ]
+              child: Padding(
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18.0, vertical: 30.0),
+                child: cubit.tabBarWidgets[cubit.tabBarIndex],
               ),
-            ) : null,
-
-            body: Padding(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 18.0, vertical: 30.0),
-              child: cubit.tabBarWidgets[cubit.tabBarIndex],
             ),
 
 
