@@ -1,7 +1,6 @@
 // sliced_circle.dart
 // at C:\Users\mhdba\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_fortune_wheel-1.3.2\lib\src\wheel
 
-
 // part of 'wheel.dart';
 //
 // class _TransformedCircleSlice extends StatelessWidget {
@@ -52,7 +51,7 @@
 //             child: Transform.translate(
 //               offset: Offset(15, -15),
 //               child: Image.asset(
-//                 'assets/images/others/screw2.png',
+//                 'assets/images/others/nut.png',
 //                 color: Colors.white,
 //                 filterQuality: FilterQuality.high,
 //                 height: 30,
@@ -150,3 +149,4 @@
 //     return false;
 //   }
 // }
+//
