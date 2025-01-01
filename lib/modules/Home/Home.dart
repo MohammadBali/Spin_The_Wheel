@@ -220,7 +220,6 @@ class _HomeState extends State<Home> {
   ///Wheel Settings
   Widget myWheel({required AppCubit cubit,})
   {
-    List<String> ax=['','',''];
     return LayoutBuilder(builder: (context, constraints) {
       double maxSize = constraints.maxWidth < constraints.maxHeight
           ? constraints.maxWidth

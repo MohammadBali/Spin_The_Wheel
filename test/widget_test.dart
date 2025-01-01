@@ -5,27 +5,71 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:spinning_wheel/main.dart';
-import 'package:spinning_wheel/modules/Home/Home.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:spinning_wheel/layout/cubit/cubit.dart';
+import 'package:spinning_wheel/layout/cubit/states.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget( MyApp(isDark: true, homeWidget: Home(),));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  late AppCubit appCubit;
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  setUp(() {
+    appCubit = AppCubit();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Initialize FFI
+    // sqfliteFfiInit();
+    // databaseFactory = databaseFactoryFfi;
   });
+
+  tearDown(() {
+    appCubit.close();
+  });
+
+  group('AppCubit Theme Tests', () {
+    blocTest<AppCubit, AppStates>(
+      'emits [AppChangeThemeModeState] when theme is toggled',
+      build: () => appCubit,
+      act: (cubit) => cubit.changeTheme(),
+      expect: () => [isA<AppChangeThemeModeState>()],
+      verify: (_) {
+        expect(appCubit.isDarkTheme, true); // Check the toggled value
+      },
+    );
+
+    blocTest<AppCubit, AppStates>(
+      'loads theme from cache and emits [AppChangeThemeModeState]',
+      build: () => appCubit,
+      act: (cubit) => cubit.changeTheme(themeFromState: true),
+      expect: () => [isA<AppChangeThemeModeState>()],
+      verify: (_) {
+        expect(appCubit.isDarkTheme, true);
+      },
+    );
+  });
+
+  group('AppCubit Tab Bar Tests', () {
+    blocTest<AppCubit, AppStates>(
+      'emits [AppChangeTabBar] when tab index changes',
+      build: () => appCubit,
+      act: (cubit) => cubit.changeTabBar(1),
+      expect: () => [isA<AppChangeTabBar>()],
+      verify: (_) {
+        expect(appCubit.tabBarIndex, 1); // Check the updated index
+      },
+    );
+  });
+
+  group('AppCubit Language Change Tests', () {
+    blocTest<AppCubit, AppStates>(
+      'emits [AppChangeLanguageState] when language is changed',
+      build: () => appCubit,
+      act: (cubit) => cubit.changeLanguage('en'),
+      expect: () => [isA<AppChangeLanguageState>()],
+      verify: (_) {
+        expect(AppCubit.language, 'en'); // Ensure language is updated
+      },
+    );
+  });
+
 }

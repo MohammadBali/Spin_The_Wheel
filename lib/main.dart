@@ -1,10 +1,8 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:spinning_wheel/layout/home_layout.dart';
 import 'package:spinning_wheel/shared/bloc_observer.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
-import 'package:spinning_wheel/shared/components/app_components.dart';
 import 'package:spinning_wheel/shared/styles/themes.dart';
 
 Future<void> main() async

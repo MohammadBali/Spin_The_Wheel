@@ -82,24 +82,25 @@ Widget defaultButton(
   void Function()? onPressed,
   String message='SUBMIT',
   Widget? customChild,
+  Key? key,
 })
 {
   switch (type)
   {
     case ButtonType.filled:
-      return FilledButton(onPressed: onPressed, child: customChild?? Text(message),);
+      return FilledButton(onPressed: onPressed, key: key, child: customChild?? Text(message),);
 
     case ButtonType.filledTonal:
-      return FilledButton.tonal(onPressed: onPressed, child: customChild?? Text(message));
+      return FilledButton.tonal(onPressed: onPressed, key: key, child: customChild?? Text(message));
 
     case ButtonType.outlined:
-      return OutlinedButton(onPressed: onPressed, child: customChild?? Text(message));
+      return OutlinedButton(onPressed: onPressed, key: key, child: customChild?? Text(message));
 
     case ButtonType.elevated:
-      return ElevatedButton(onPressed: onPressed, child: customChild?? Text(message));
+      return ElevatedButton(onPressed: onPressed, key: key, child: customChild?? Text(message));
 
     case ButtonType.text:
-      return TextButton(onPressed: onPressed, child: customChild?? Text(message), );
+      return TextButton(onPressed: onPressed, key: key, child: customChild?? Text(message), );
 
 
   }

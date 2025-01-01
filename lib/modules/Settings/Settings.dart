@@ -126,7 +126,10 @@ class _SettingsState extends State<Settings> {
                             }).catchError((error)
                             {
                               debugPrint('ERROR WHILE SWITCHING LANGUAGES, ${error.toString()}');
-                              snackBarBuilder(message: error.toString(), context: context);
+                              if(context.mounted)
+                              {
+                                snackBarBuilder(message: error.toString(), context: context);
+                              }
                             });
                           });
                         },
@@ -201,7 +204,10 @@ class _SettingsState extends State<Settings> {
                             }).catchError((error)
                             {
                               debugPrint('ERROR WHILE SWITCHING COLOR SCHEME, ${error.toString()}');
-                              snackBarBuilder(message: error.toString(), context: context);
+                              if(context.mounted)
+                              {
+                                snackBarBuilder(message: error.toString(), context: context);
+                              }
                             });
                           });
                         },

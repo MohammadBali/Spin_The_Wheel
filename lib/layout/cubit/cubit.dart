@@ -306,7 +306,7 @@ class AppCubit extends Cubit<AppStates>
     }).catchError((error, stackTrace)
     {
       debugPrint('ERROR WHILE GETTING DATABASE..., ${error.toString()}');
-      print(stackTrace);
+      debugPrint(stackTrace);
       emit(AppGetDatabaseErrorState(message: 'ERROR WHILE GETTING DATABASE..., ${error.toString()}'));
     });
   }
