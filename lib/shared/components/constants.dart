@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 
 String token='';
@@ -23,6 +24,10 @@ Set<PointerDeviceKind> dragDevices={PointerDeviceKind.touch, PointerDeviceKind.m
 ///Total Trials
 int totalTrials= 100;
 
+///DateFormat for the logdate style
+DateFormat logDateFormatter = DateFormat('dd-MM-yyy HH.mm.ss');
+
+///Default Items to build on the first app run
 List<ItemModel> defaultItems=
 [
   ItemModel(id:1, label: 'حسم 5%', probability: 0.3, type: ItemType.win, remainingAttempts: (0.3 * totalTrials).round(), color: HexColor('3ac7fd') ),

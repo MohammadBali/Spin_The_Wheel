@@ -6,6 +6,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:confetti/confetti.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:my_logger/core/constants.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
 import 'package:spinning_wheel/shared/components/app_components.dart';
@@ -62,14 +63,31 @@ class _HomeState extends State<Home> {
   }
 
   ///Triggers tha Spinning Action
-  void spinWheel() {
-    if (!_isPlaying) {
-      setState(() {
-        _isSpinning = true; // Activate dimming
-      });
+  void spinWheel()
+  {
+    if (!_isPlaying)
+    {
+      try
+      {
+        setState(()
+        {
+          _isSpinning = true; // Activate dimming
+        });
 
-      playWheelSound(); // Start the sound when the wheel starts spinning
-      _controller.add(AppCubit.get(context).getDependentRandomIndex());
+        playWheelSound(); // Start the sound when the wheel starts spinning
+        _controller.add(AppCubit.get(context).getDependentRandomIndex());
+      }
+
+      catch(error,stackTrace)
+      {
+        logData(
+          data: 'ERROR WHILE SPINNING WHEEL..., ${error.toString()}',
+          level: LogLevel.ERROR,
+          exception: error,
+          stacktrace: stackTrace,
+          methodName: 'spinWheel',
+        );
+      }
     }
   }
 

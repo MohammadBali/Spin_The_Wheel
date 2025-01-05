@@ -1,5 +1,8 @@
+import 'package:my_logger/models/filter.dart';
+import 'package:my_logger/models/logger.dart';
 import 'package:spinning_wheel/modules/Items/Items.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
+import 'package:spinning_wheel/shared/components/app_components.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -30,37 +33,20 @@ class _SettingsState extends State<Settings> {
             {
               cubit.getDatabase(cubit.database);
             },
-            child: OrientationBuilder(builder: (context,orientation)
-            {
-              if(orientation == Orientation.portrait)
-              {
-                return CustomScrollView(
-                  slivers:
-                  [
-                    SliverFillRemaining(
-                      child: itemBuilder(cubit: cubit),
-                    ),
-                  ],
-                );
-              }
-              else
-              {
-                return SingleChildScrollView(child: itemBuilder(cubit: cubit),);
-              }
-            }),
+            child: SingleChildScrollView(child: itemBuilder(cubit: cubit),),
           );
         }
     );
   }
 
-  Widget itemBuilder({required AppCubit cubit,})=>Column(
+  Widget itemBuilder({required AppCubit cubit, bool isPortrait=true})=>Column(
     children:
     [
       const SizedBox(height: 15,),
 
       Center(
         child: CircleAvatar(
-          radius: 70,
+          radius: 55,
           backgroundColor: Colors.transparent,
           child: Image(
             image: AssetImage('assets/images/personal/personal.png'),
@@ -332,7 +318,208 @@ class _SettingsState extends State<Settings> {
         ],
       ),
 
+      const SizedBox(height: 15,),
+
+      Row(
+        children:
+        [
+          const Icon(
+            Icons.file_present_outlined,
+            size: 22,
+          ),
+
+          const SizedBox(width: 10,),
+
+          Text(
+            Localization.translate('export_log'),
+            style: textStyleBuilder(fontSize: 18),
+          ),
+
+          const Spacer(),
+
+          defaultButton(
+              message: Localization.translate('export_now'),
+              type: ButtonType.text,
+              onPressed: ()async
+              {
+                await _showLogDialog(context, cubit);
+              }
+          ),
+
+        ],
+      ),
+
+      const SizedBox(height: 15,),
+
+      Row(
+        children:
+        [
+          const Icon(
+            Icons.delete_forever_outlined,
+            size: 22,
+          ),
+
+          const SizedBox(width: 10,),
+
+          Text(
+            Localization.translate('delete_logs'),
+            style: textStyleBuilder(fontSize: 18),
+          ),
+
+          const Spacer(),
+
+          defaultButton(
+            message: Localization.translate('delete_now'),
+            type: ButtonType.text,
+            onPressed: ()
+            {
+              MyLogger.logs.deleteAll();
+              snackBarBuilder(context:context, message: Localization.translate('success'));
+            },
+          ),
+        ],
+      ),
+
+      const SizedBox(height: 15,),
+
+      Center(
+        child: defaultButton(
+            message: Localization.translate('about'),
+            type: ButtonType.outlined,
+            onPressed: ()
+            {
+              _aboutDialog(context: context);
+            }
+        ),
+      ),
+
+
     ],
   );
+
+  ///Show the About Us Dialog
+  void _aboutDialog({required BuildContext context,})
+  {
+    showDialog(
+        context: context,
+        builder: (dialogContext)
+        {
+          return Directionality(
+            textDirection: appDirectionality(),
+            child: defaultAlertDialog(
+                context: dialogContext,
+                title: Localization.translate('about'),
+                content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children:
+                      [
+                        Text(
+                          Localization.translate('about_secondary'),
+                          style: textStyleBuilder(),
+                        ),
+
+                        const SizedBox(height: 15,),
+
+                        Text(
+                          Localization.translate('mhd_bali'),
+                          style: textStyleBuilder(color: currentColorScheme(context).secondary),
+                        ),
+
+                        const SizedBox(height: 15,),
+
+                        Text(
+                          Localization.translate('about_tertiary'),
+                          style: textStyleBuilder(),
+                        ),
+
+                        const SizedBox(height: 15,),
+
+                        Text(
+                          Localization.translate('about_email'),
+                          style: textStyleBuilder(color: currentColorScheme(context).tertiary),
+                        ),
+                      ],
+                    ),
+                ),
+            ),
+          );
+        }
+    );
+  }
+
+  ///Dialog to represents the time span drop list
+  Future<void> _showLogDialog(BuildContext context, AppCubit cubit)
+  async {
+    return await showDialog(
+        context: context,
+        builder: (dialogContext)
+        {
+          return defaultAlertDialog(
+            context: dialogContext,
+            title: Localization.translate('export_log'),
+            content: Directionality(
+              textDirection: appDirectionality(),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children:
+                  [
+                    Text(Localization.translate('export_title'), style: textStyleBuilder(),),
+
+                    const SizedBox(height: 15,),
+
+                    logDialogItemBuilder(cubit: cubit, title: Localization.translate('log_this_hour'), filter: LogFilter.thisHour(), dialogContext: dialogContext),
+
+                    const SizedBox(height: 15,),
+
+                    logDialogItemBuilder(cubit: cubit, title: Localization.translate('log_last_day'), filter: LogFilter.last24Hours(),dialogContext: dialogContext),
+
+                    const SizedBox(height: 15,),
+
+                    logDialogItemBuilder(cubit: cubit, title: Localization.translate('log_today'), filter: LogFilter.today(),dialogContext: dialogContext),
+
+                    const SizedBox(height: 15,),
+
+                    logDialogItemBuilder(cubit: cubit, title: Localization.translate('log_last_week'), filter: LogFilter.week(),dialogContext: dialogContext),
+
+                    const SizedBox(height: 15,),
+
+                    logDialogItemBuilder(cubit: cubit, title: Localization.translate('log_all'), filter: LogFilter.all(),dialogContext: dialogContext),
+
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  ///Time Span Item Builder
+  Widget logDialogItemBuilder({required AppCubit cubit, required BuildContext dialogContext, required String title, required LogFilter filter})
+  {
+
+    return Row(
+      children: [
+        Expanded(
+          child: defaultButton(
+            type: ButtonType.outlined,
+            message: Localization.translate(title),
+            onPressed: ()
+            {
+              defaultLogExporter(filter: filter, context: context);
+              Navigator.of(dialogContext).pop();
+            }
+          ),
+        ),
+      ],
+    );
+
+  }
 }
 

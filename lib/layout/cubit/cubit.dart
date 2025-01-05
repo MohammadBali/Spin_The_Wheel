@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:my_logger/core/constants.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/modules/Home/Home.dart';
 import 'package:spinning_wheel/modules/Settings/Settings.dart';
@@ -110,11 +111,19 @@ class AppCubit extends Cubit<AppStates>
 
       return items!.items!.length - 1; // Fallback in case of rounding errors
     }
-    catch(e)
+    catch(e, stackTrace)
     {
       debugPrint('ERROR WHILE GETTING WEIGHTED RANDOM INDEX..., ${e.toString()}');
 
       emit(AppSpinWheelErrorState(message: 'ERROR WHILE GETTING WEIGHTED RANDOM INDEX..., ${e.toString()}'));
+
+      logData(
+        data: 'ERROR WHILE GETTING WEIGHTED RANDOM INDEX..., ${e.toString()}',
+        level: LogLevel.ERROR,
+        exception: e,
+        stacktrace: stackTrace,
+        methodName: 'getWeightedRandomIndex',
+      );
     }
     return -1;
   }
@@ -160,16 +169,31 @@ class AppCubit extends Cubit<AppStates>
 
           emit(AppSpinWheelSuccessState());
           setCurrentItem(i);
+
+          logData(
+            data: 'The Wheel Was Spent with item: ${item.toString()}',
+            level: LogLevel.INFO,
+            methodName: 'getDependentRandomIndex',
+          );
+
           return i;
         }
       }
 
       throw Exception("Failed to select an item based on weights.");
-    } catch (e)
+    } catch (e, stackTrace)
     {
       debugPrint('ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}');
 
       emit(AppSpinWheelErrorState(message: 'ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}'));
+
+      logData(
+        data: 'ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}',
+        level: LogLevel.ERROR,
+        exception: e,
+        stacktrace: stackTrace,
+        methodName: 'getDependentRandomIndex',
+      );
     }
     return -1;
   }
@@ -191,18 +215,34 @@ class AppCubit extends Cubit<AppStates>
   ///Set The Colors Range for the Wheel
   void setWheelColors()
   {
-    wheelColors = generateHarmoniousColors(
-      currentColorScheme(),
-      count: 12, // Generate 12 harmonious colors
-      isRainbow: currentColorChoice != colorChoices[0]? false : true,
-    );
-
-    if(shuffleColors)
+    try
     {
-      wheelColors.shuffle();
-    }
+      wheelColors = generateHarmoniousColors(
+        currentColorScheme(),
+        count: 12, // Generate 12 harmonious colors
+        isRainbow: currentColorChoice != colorChoices[0]? false : true,
+      );
 
-    emit(AppChangeWheelColorsState());
+      if(shuffleColors)
+      {
+        wheelColors.shuffle();
+      }
+
+      emit(AppChangeWheelColorsState());
+    }
+    catch(e,stackTrace)
+    {
+      debugPrint('ERROR WHILE CHANGING WHEEL COLORS..., ${e.toString()}');
+      emit(AppChangeWheelColorsErrorState());
+
+      logData(
+        data: 'ERROR WHILE CHANGING WHEEL COLORS..., ${e.toString()}',
+        level: LogLevel.ERROR,
+        exception: e,
+        stacktrace: stackTrace,
+        methodName: 'setWheelColors',
+      );
+    }
   }
 
   ///Set Shuffle Colors
@@ -288,10 +328,24 @@ class AppCubit extends Cubit<AppStates>
       database = value;
       emit(AppCreateDatabaseSuccessState());
 
-    }).catchError((error)
+      logData(
+        data: 'Created & Opened Database...',
+        level: LogLevel.INFO,
+        methodName: 'createDatabase',
+      );
+
+    }).catchError((e, stackTrace)
     {
-      debugPrint('ERROR WHILE CREATING DB..., ${error.toString()}');
+      debugPrint('ERROR WHILE CREATING DB..., ${e.toString()}');
       emit(AppCreateDatabaseErrorState());
+
+      logData(
+        data: 'ERROR WHILE CREATING DB..., ${e.toString()}',
+        level: LogLevel.ERROR,
+        exception: e,
+        stacktrace: stackTrace,
+        methodName: 'createDatabase',
+      );
     });
   }
 
@@ -303,14 +357,28 @@ class AppCubit extends Cubit<AppStates>
     {
       items = ItemsModel.fromJson(value);
       emit(AppGetDatabaseSuccessState());
+
+      logData(
+        data: 'Got Database...',
+        level: LogLevel.INFO,
+        methodName: 'getDatabase',
+      );
+
     }).catchError((error, stackTrace)
     {
       debugPrint('ERROR WHILE GETTING DATABASE..., ${error.toString()}');
       debugPrint(stackTrace);
       emit(AppGetDatabaseErrorState(message: 'ERROR WHILE GETTING DATABASE..., ${error.toString()}'));
+
+      logData(
+        data: 'ERROR WHILE GETTING DATABASE..., ${error.toString()}',
+        level: LogLevel.ERROR,
+        exception: error,
+        stacktrace: stackTrace,
+        methodName: 'getDatabase',
+      );
     });
   }
-
 
   ///*Insert Into The Tasks Table
   ///[label] Item Label
@@ -334,12 +402,29 @@ class AppCubit extends Cubit<AppStates>
         debugPrint('$value has been Inserted successfully');
         emit(AppInsertDatabaseSuccessState());
 
+        logData(
+          data: 'Added to  Database The Item: '
+              'label:$label / probability:$probability / remainingAttempts:$remainingAttempts'
+              ' / color:$color / type:${type.name}',
+          level: LogLevel.INFO,
+          methodName: 'insertIntoDatabase',
+        );
+
         getDatabase(database!);
 
-      }).catchError((error)
+      }).catchError((error, stackTrace)
       {
-        debugPrint('Error has occurred while inserting into database, ${error.toString()}');
+        debugPrint('ERROR WHILE INSERTING INTO DB..., ${error.toString()}');
         emit(AppInsertDatabaseErrorState(message: 'Error has occurred while inserting into database, ${error.toString()}'));
+
+        logData(
+          data: 'ERROR WHILE INSERTING INTO DB..., ${error.toString()}',
+          level: LogLevel.ERROR,
+          exception: error,
+          stacktrace: stackTrace,
+          methodName: 'insertIntoDatabase',
+        );
+
       });
     });
   }
@@ -360,10 +445,26 @@ class AppCubit extends Cubit<AppStates>
     {
       getDatabase(database);
       emit(AppUpdateDatabaseSuccessState(showSnack: showSnack));
-    }).catchError((error)
+
+      logData(
+        data: 'Updated Database with the following values: '
+            'ItemType:${type?? type?.name} / label:$label / probability:$probability / remainingAttempts:$remainingAttempts'
+            ' / color:$color / id:$id',
+        level: LogLevel.INFO,
+        methodName: 'updateDatabase',
+      );
+    }).catchError((error, stackTrace)
     {
       debugPrint('ERROR WHILE UPDATING DB..., ${error.toString()}');
       emit(AppUpdateDatabaseErrorState(message: 'ERROR WHILE UPDATING DB..., ${error.toString()}'));
+
+      logData(
+        data: 'ERROR WHILE UPDATING INTO DB..., ${error.toString()}',
+        level: LogLevel.ERROR,
+        exception: error,
+        stacktrace: stackTrace,
+        methodName: 'updateDatabase',
+      );
     });
   }
 
@@ -377,10 +478,25 @@ class AppCubit extends Cubit<AppStates>
     {
       getDatabase(database);
       emit(AppDeleteFromDatabaseSuccessState());
-    }).catchError((error)
+
+      logData(
+        data: 'Updated Database with the following: id:$id',
+        level: LogLevel.INFO,
+        methodName: 'deleteDatabase',
+      );
+
+    }).catchError((error, stackTrace)
     {
       debugPrint('ERROR WHILE DELETING FROM DB..., ${error.toString()}');
       emit(AppDeleteFromDatabaseErrorState(message: 'ERROR WHILE DELETING FROM DB..., ${error.toString()}'));
+
+      logData(
+        data: 'ERROR WHILE DELETING INTO DB..., ${error.toString()}',
+        level: LogLevel.ERROR,
+        exception: error,
+        stacktrace: stackTrace,
+        methodName: 'deleteDatabase',
+      );
     });
   }
 
@@ -396,21 +512,35 @@ class AppCubit extends Cubit<AppStates>
   ///Alter an item
   void alterItem(ItemModel myItem, {bool showSnack =false})
   {
-    updateDatabase(
-        id: myItem.id!, label: myItem.label, type: myItem.type,
-        probability: myItem.probability, remainingAttempts: myItem.remainingAttempts,
-        color: hexCodeExtractor(myItem.color!),
-        showSnack: showSnack
-    );
-
-    for (var item in items?.items ?? [])
+    try
     {
-      if(item.id == myItem.id)
+      updateDatabase(
+          id: myItem.id!, label: myItem.label, type: myItem.type,
+          probability: myItem.probability, remainingAttempts: myItem.remainingAttempts,
+          color: hexCodeExtractor(myItem.color!),
+          showSnack: showSnack
+      );
+
+      for (var item in items?.items ?? [])
       {
-        item = myItem;
-        emit(AppAlterItemState());
-        break;
+        if(item.id == myItem.id)
+        {
+          item = myItem;
+          emit(AppAlterItemState());
+          break;
+        }
       }
+    }
+
+    catch(error, stackTrace)
+    {
+      logData(
+        data: 'ERROR WHILE ALTERING ITEM..., ${error.toString()}',
+        level: LogLevel.ERROR,
+        exception: error,
+        stacktrace: stackTrace,
+        methodName: 'alterItem',
+      );
     }
   }
 }

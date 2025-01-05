@@ -108,6 +108,40 @@ const Map<String,String> en={
 
   'color_scheme_choices':'From Current Scheme',
 
+  'about':'About',
+
+  'about_secondary':'This project was executed by:',
+
+  'about_tertiary':'For NUA©',
+
+  'mhd_bali':'Mohammad Bali - محمد البالي',
+
+  'about_email':'eng.mohammadbali@gmail.com',
+
+  'export_log':'Export Log',
+
+  'export_title':'Choose Time Span',
+
+  'log_this_hour':'This Hour',
+
+  'log_last_day':'Last 24 Hours',
+
+  'log_today':'Today',
+
+  'log_last_week':'This Week',
+
+  'log_all':'All',
+
+  'export_now':'Export Now',
+
+  'export_success_toast':'Exported Log Successfully',
+
+  'export_error_toast':'Error Exporting Log',
+
+  'delete_logs':'Delete Logs',
+
+  'delete_now':'Delete Now',
+
   //--------------------------------------------------------------------\\
 
   //ITEM DETAILS
@@ -274,6 +308,39 @@ const Map<String,String> ar={
 
   'color_scheme_choices':'من مخطط الألوان الحالي',
 
+  'about':'حول',
+
+  'about_secondary':'تم تنفيذ هذا المشروع من قبل: ',
+
+  'about_tertiary':'NUA© لصالح شركة',
+
+  'mhd_bali':'Mohammad Bali - محمد البالي',
+
+  'about_email':'eng.mohammadbali@gmail.com',
+
+  'export_log':'تصدير السجل (تقني) ',
+
+  'export_title':'اختر الفترة الزمنية',
+
+  'log_this_hour':'هذه الساعة',
+
+  'log_last_day':'آخر 24 ساعة',
+
+  'log_today':'اليوم',
+
+  'log_last_week':'الأسبوع الماضي',
+
+  'log_all':'الكل',
+
+  'export_now':'التصدير الآن',
+
+  'export_success_toast':'تم تصدير السجل بنجاح',
+
+  'export_error_toast':'تعذر تصدير السجل',
+
+  'delete_logs':'حذف السجلات (تقني)',
+
+  'delete_now':'الحذف الآن',
 
 
   //--------------------------------------------------------------------\\

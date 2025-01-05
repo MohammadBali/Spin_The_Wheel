@@ -1,6 +1,12 @@
+import 'dart:io';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:my_logger/core/constants.dart';
+import 'package:my_logger/models/filter.dart';
+import 'package:my_logger/models/logger.dart';
 import 'Imports/default_imports.dart';
+import 'package:path_provider/path_provider.dart';
 
 ///Checks if a String is numeric
 bool isNumeric(String? s) {
@@ -9,6 +15,8 @@ bool isNumeric(String? s) {
   }
   return double.tryParse(s) != null;
 }
+
+//------------------------------------------------------------------------------------------\\
 
 ///Generate Colors
 List<Color> generateHarmoniousColors(ColorScheme colorScheme, {int count = 10, bool isRainbow=true}) {
@@ -72,6 +80,8 @@ List<Color> generateHarmoniousColors(ColorScheme colorScheme, {int count = 10, b
 
 }
 
+//------------------------------------------------------------------------------------------\\
+
 ///Generate a Text Style regarding the color depending on the fillColor passed
 TextStyle generateTextStyle(Color fillColor) {
   // Check brightness to decide contrasting text color
@@ -85,6 +95,8 @@ TextStyle generateTextStyle(Color fillColor) {
   );
 }
 
+//------------------------------------------------------------------------------------------\\
+
 ///Extracts The Hexadecimal Color From The Color
 String hexCodeExtractor(Color color)
 {
@@ -95,6 +107,7 @@ String hexCodeExtractor(Color color)
   return '$hexA$hexR$hexG$hexB';
 }
 
+//------------------------------------------------------------------------------------------\\
 
 /// A custom Path to paint stars.
 Path drawStar(Size size) {
@@ -121,4 +134,148 @@ Path drawStar(Size size) {
   return path;
 }
 
+//------------------------------------------------------------------------------------------\\
 
+///Logger for writing log
+void logData({
+  required String data,
+  required LogLevel level,
+  String? className,
+  String? methodName,
+  dynamic exception,
+  StackTrace? stacktrace,
+})
+{
+  if(!kIsWeb)
+  {
+    //Won't print to console
+    MyLogger.config.isDebuggable=false;
+
+    MyLogger.log(
+      text:data,
+      type: level,
+      className: className,
+      methodName: methodName,
+      exception: exception,
+      stacktrace: stacktrace,
+    );
+  }
+
+
+}
+
+//------------------------------------------------------------------------------------------\\
+
+///Export Log
+///* filter: Filter by this week, this month, etc...
+Future<void> defaultLogExporter({required LogFilter filter, required BuildContext context}) async
+{
+  if(Platform.isWindows)
+  {
+    try {
+      var logs = await MyLogger.logs.getByFilter(filter);
+      String path = await getPath();
+
+      File('${path}logs-${logDateFormatter.format(DateTime.now())}.txt')
+        ..createSync(recursive: true)
+        ..writeAsStringSync(logs.toString());
+
+      if(context.mounted)
+      {
+        snackBarBuilder(context: context, message: Localization.translate('export_success_toast'));
+
+        Future.delayed(Duration(seconds: 6), ()
+        {
+          if(context.mounted)
+          {snackBarBuilder(context: context, message: '${path}logs-${logDateFormatter.format(DateTime.now())}.txt');}
+        });
+      }
+    }
+    catch (e)
+    {
+      debugPrint('Error exporting logs..., ${e.toString()}');
+
+      if(context.mounted)
+      {
+        snackBarBuilder(context: context, message: Localization.translate('export_error_toast'));
+      }
+    }
+  }
+
+  else
+  {
+    String fileName= 'logs - ${DateTime.now()}.txt';
+
+    MyLogger.logs.export(
+        fileName: fileName,
+        exportType: FileType.TXT,
+        filter: filter,
+    ).then((value)
+    async {
+
+      String path = await getPath();
+
+      File('$path$fileName')
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(value.readAsBytesSync());
+
+      print('$path$fileName');
+
+      if(context.mounted)
+      {
+        snackBarBuilder(context: context, message: Localization.translate('export_success_toast'));
+
+        Future.delayed(Duration(seconds: 5),()
+        {
+          if(context.mounted)
+          {
+            snackBarBuilder(context: context, message: 'Exported to $path$fileName');
+          }
+        });
+      }
+
+    }).catchError((error, stackTrace)
+    {
+      debugPrint('Error exporting logs..., ${error.toString()}');
+
+      if(context.mounted)
+      {
+        snackBarBuilder(context: context, message: Localization.translate('export_error_toast'));
+      }
+    });
+  }
+}
+
+//------------------------------------------------------------------------------------------\\
+
+///Get a Path
+Future<String> getPath() async
+{
+  String directory;
+  if (Platform.isIOS)
+  {
+    directory = (await getDownloadsDirectory())?.path ?? (await getTemporaryDirectory()).path;
+  }
+
+  else if(Platform.isWindows)
+  {
+    final path = await getApplicationDocumentsDirectory();
+    String finalString = path.path;
+    finalString +='\\';
+    return finalString;
+  }
+
+  else
+  {
+
+    final directory = await getDownloadsDirectory();
+
+    String finalString = directory?.path?? (await getTemporaryDirectory()).path;
+    finalString +='/';
+
+    return finalString;
+  }
+  return directory;
+}
+
+//------------------------------------------------------------------------------------------\\

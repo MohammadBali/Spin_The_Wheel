@@ -54,11 +54,14 @@ dependencies:
   confetti: ^0.8.0
 
   animated_text_kit: ^4.2.2
+  my_logger: ^1.0.2
 
 
   #Testing
   sqflite_common_ffi: ^2.3.4+4
   bloc_test: ^9.1.7
+  path_provider: ^2.1.1
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:

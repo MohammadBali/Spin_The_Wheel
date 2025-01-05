@@ -96,6 +96,8 @@ class AppSpinWheelNoMoreAttemptsState extends AppStates{}
 
 class AppChangeWheelColorsState extends AppStates{}
 
+class AppChangeWheelColorsErrorState extends AppStates{}
+
 class AppSetShuffleColorState extends AppStates{}
 
 class AppSetCurrentColorChoiceState extends AppStates{}
