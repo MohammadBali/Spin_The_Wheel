@@ -26,7 +26,8 @@ void main() {
     appCubit.close();
   });
 
-  group('AppCubit Theme Tests', () {
+  group('AppCubit Theme Tests', ()
+  {
     blocTest<AppCubit, AppStates>(
       'emits [AppChangeThemeModeState] when theme is toggled',
       build: () => appCubit,
@@ -71,5 +72,7 @@ void main() {
       },
     );
   });
+
+
 
 }
