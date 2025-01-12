@@ -29,7 +29,7 @@ void main() {
   group('AppCubit Theme Tests', ()
   {
     blocTest<AppCubit, AppStates>(
-      'emits [AppChangeThemeModeState] when theme is toggled',
+      'cubit_theme_test_pass',
       build: () => appCubit,
       act: (cubit) => cubit.changeTheme(),
       expect: () => [isA<AppChangeThemeModeState>()],
@@ -39,7 +39,7 @@ void main() {
     );
 
     blocTest<AppCubit, AppStates>(
-      'loads theme from cache and emits [AppChangeThemeModeState]',
+      'cubit_theme_load_pass',
       build: () => appCubit,
       act: (cubit) => cubit.changeTheme(themeFromState: true),
       expect: () => [isA<AppChangeThemeModeState>()],
@@ -51,7 +51,7 @@ void main() {
 
   group('AppCubit Tab Bar Tests', () {
     blocTest<AppCubit, AppStates>(
-      'emits [AppChangeTabBar] when tab index changes',
+      'cubit_tab_bar_pass',
       build: () => appCubit,
       act: (cubit) => cubit.changeTabBar(1),
       expect: () => [isA<AppChangeTabBar>()],
@@ -63,7 +63,7 @@ void main() {
 
   group('AppCubit Language Change Tests', () {
     blocTest<AppCubit, AppStates>(
-      'emits [AppChangeLanguageState] when language is changed',
+      'cubit_language_pass',
       build: () => appCubit,
       act: (cubit) => cubit.changeLanguage('en'),
       expect: () => [isA<AppChangeLanguageState>()],
