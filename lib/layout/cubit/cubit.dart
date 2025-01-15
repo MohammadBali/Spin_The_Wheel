@@ -85,6 +85,19 @@ class AppCubit extends Cubit<AppStates>
 
   //--------------------------------------------------\\
 
+  //DIM SCREEN LIGHT
+
+  bool isDimmed=false;
+
+  ///Change the [isDimmed] variable
+  void changeIsDimmed()
+  {
+    isDimmed = !isDimmed;
+    emit(AppChangeDimLightState());
+  }
+
+  //--------------------------------------------------\\
+
   //SPINNING WHEEL
 
   ItemModel? currentItem;

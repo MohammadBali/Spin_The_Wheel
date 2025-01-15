@@ -5,6 +5,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 
+import 'Imports/default_imports.dart';
+
 String token='';
 
 String refreshToken='';
@@ -35,3 +37,8 @@ List<ItemModel> defaultItems=
   ItemModel(id:3, label: 'دورة أخرى', probability: 0.2, type: ItemType.tie, remainingAttempts: (0.2 * totalTrials).round(), color: HexColor('5dda76')),
   ItemModel(id:4, label: 'خسارة', probability: 0.4, type: ItemType.loose, remainingAttempts: (0.4 * totalTrials).round(), color: HexColor('fdfc2e')),
 ];
+
+///Dimming Value for Screen
+const double dimValue =0.75;
+
+const Color dimColor = Colors.black;

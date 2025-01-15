@@ -12,6 +12,8 @@ class AppSetDefaultItems extends AppStates{}
 
 class AppChangeTabBarShownState extends AppStates{}
 
+class AppChangeDimLightState extends AppStates{}
+
 //------------------------------------
 
 //DB CREATION

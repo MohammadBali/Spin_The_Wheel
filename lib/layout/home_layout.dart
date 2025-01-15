@@ -93,28 +93,64 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
 
                       ]
                   ),
-                  flexibleSpace: Container(
-                    decoration: BoxDecoration(image: DecorationImage(
-                      image: AssetImage('assets/images/background/points.png',),
-                      fit: BoxFit.cover,
-                      opacity: 0.9,),
-                    ),
+                  flexibleSpace: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/background/points.png',),
+                            fit: BoxFit.cover,
+                            opacity: 0.9,
+                          ),
+                        ),
+                      ),
+
+                      IgnorePointer(
+                        ignoring: true,
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                          opacity: cubit.isDimmed ? dimValue : 0.0, // Control dim level
+                          child: Container(
+                            color: dimColor, // Dim overlay color
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 )
                 : null,
 
-            body: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/background/points.png',),
-                  fit: BoxFit.cover,
-                  opacity: 0.9
+            body: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/background/points.png',),
+                      fit: BoxFit.cover,
+                      opacity: 0.9,
+                    ),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18.0, vertical: 30.0),
-                child: cubit.tabBarWidgets[cubit.tabBarIndex],
-              ),
+
+                // Animated Dimmer Overlay
+                IgnorePointer(
+                  ignoring: true,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                    opacity: cubit.isDimmed ? dimValue : 0.0, // Control dim level
+                    child: Container(
+                      color: dimColor, // Dim overlay color
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsetsDirectional.symmetric(horizontal: 18.0, vertical: 30.0),
+                  child: cubit.tabBarWidgets[cubit.tabBarIndex],
+                ),
+              ],
             ),
 
 
