@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:my_logger/core/constants.dart';
+import 'package:soundpool/soundpool.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/shared/components/Imports/default_imports.dart';
 import 'package:spinning_wheel/shared/components/app_components.dart';
@@ -23,20 +24,38 @@ class _HomeState extends State<Home> {
 
   Stream<int> get myStream => _controller.stream;
   bool _isSpinning = false; // Track spinning state
-  late AudioPlayer _audioPlayer;
 
-  Timer? _speedTimer;
+  late Soundpool pool;
+
+  late int spinId;
+  late int spinStream;
+
+  late int winId;
+  late int winStream;
+
+  late int looseId;
+  late int looseStream;
+
   bool _isPlaying = false;
-  final double _currentPlaybackSpeed = 1.0;
 
   late ConfettiController _controllerCenterRight;
   late ConfettiController _controllerCenterLeft;
   late ConfettiController _controllerCenter;
 
+
+  ///Set Audio Assets
+  void preloadAudio() async {
+    spinId = await rootBundle.load('assets/audio/wheel.mp3').then((soundData)=> pool.load(soundData));
+    winId = await rootBundle.load('assets/audio/clapping.mp3').then((soundData)=> pool.load(soundData));
+    looseId = await rootBundle.load('assets/audio/loose.mp3').then((soundData)=> pool.load(soundData));
+  }
+
   @override
   void initState() {
     super.initState();
-    _audioPlayer = AudioPlayer();
+    pool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.notification));
+
+    preloadAudio();
 
     _controllerCenterRight =
         ConfettiController(duration: const Duration(seconds: 10));
@@ -53,12 +72,13 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     _controller.close();
-    _audioPlayer.dispose();
-    _speedTimer?.cancel();
 
     _controllerCenterRight.dispose();
     _controllerCenterLeft.dispose();
     _controllerCenter.dispose();
+
+    pool.dispose();
+
     super.dispose();
   }
 
@@ -98,10 +118,7 @@ class _HomeState extends State<Home> {
   void playWheelSound() async {
     if (!_isPlaying)
     {
-      // Loop the sound
-      await _audioPlayer.setReleaseMode(ReleaseMode.release);
-      await _audioPlayer.setPlaybackRate(_currentPlaybackSpeed);
-      await _audioPlayer.play(AssetSource('audio/wheel.mp3'), volume: 1.0);
+      spinStream = await pool.play(spinId);
 
       setState(() {
         _isPlaying = true;
@@ -112,8 +129,8 @@ class _HomeState extends State<Home> {
   ///Stop Spinning Sound
   void stopWheelSound() async {
     if (_isPlaying) {
-      _speedTimer?.cancel();
-      await _audioPlayer.stop();
+
+      await pool.stop(spinStream);
 
       setState(() {
         _isPlaying = false;
@@ -517,11 +534,13 @@ class _HomeState extends State<Home> {
         _controllerCenterRight.play();
         _controllerCenter.play();
 
-        _audioPlayer.play(AssetSource('audio/clapping.mp3'));
+        pool.play(winId);
+
         break;
 
       case ItemType.loose:
-        _audioPlayer.play(AssetSource('audio/loose.mp3'));
+        pool.play(looseId);
+
         break;
 
       case ItemType.tie:

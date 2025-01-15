@@ -1,19 +1,15 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spinning_wheel/layout/cubit/cubit.dart';
 import 'package:spinning_wheel/layout/cubit/states.dart';
-import 'package:spinning_wheel/main.dart';
 import 'package:spinning_wheel/layout/home_layout.dart';
 import 'package:spinning_wheel/modules/Home/Home.dart';
 import 'package:spinning_wheel/shared/bloc_observer.dart';
 import 'package:spinning_wheel/shared/components/Localization/Localization.dart';
-import 'package:spinning_wheel/shared/components/components.dart';
 import 'package:spinning_wheel/shared/network/local/cache_helper.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 

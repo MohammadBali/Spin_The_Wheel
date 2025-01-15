@@ -34,7 +34,7 @@ Future<void> main() async
 
   //Getting the last Cached ThemeMode
   bool? isDark = CacheHelper.getData(key: 'isDarkTheme');
-  isDark ??= true;
+  isDark ??= false;
 
   runApp(MyApp(isDark: isDark, homeWidget: HomeLayout(),));
 }

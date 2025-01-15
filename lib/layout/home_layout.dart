@@ -98,7 +98,11 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
                       Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/background/points.png',),
+                            image: AssetImage(
+                              cubit.isDarkTheme
+                                  ?'assets/images/background/chinese.png'
+                                  :'assets/images/background/points.png',
+                            ),
                             fit: BoxFit.cover,
                             opacity: 0.9,
                           ),
@@ -126,7 +130,11 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/background/points.png',),
+                      image: AssetImage(
+                        cubit.isDarkTheme
+                            ?'assets/images/background/chinese.png'
+                            :'assets/images/background/points.png',
+                      ),
                       fit: BoxFit.cover,
                       opacity: 0.9,
                     ),
