@@ -145,6 +145,9 @@ flutter:
         - asset: assets/fonts/Poppins/Poppins-Regular.ttf
         - asset: assets/fonts/Poppins/Poppins-Thin.ttf
 
+    - family: Vidaloka
+      fonts:
+        - asset: assets/fonts/Vidaloka/Vidaloka-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

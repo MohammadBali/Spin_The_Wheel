@@ -95,9 +95,9 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
                   ),
                   flexibleSpace: Container(
                     decoration: BoxDecoration(image: DecorationImage(
-                      image: AssetImage('assets/images/background/chinese.png',),
+                      image: AssetImage('assets/images/background/points.png',),
                       fit: BoxFit.cover,
-                      opacity: 0.4,),
+                      opacity: 0.9,),
                     ),
                   )
                 )
@@ -106,9 +106,9 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
             body: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/background/chinese.png',),
+                  image: AssetImage('assets/images/background/points.png',),
                   fit: BoxFit.cover,
-                  opacity: 0.4
+                  opacity: 0.9
                 ),
               ),
               child: Padding(

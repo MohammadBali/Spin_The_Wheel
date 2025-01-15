@@ -69,12 +69,13 @@ class _HomeState extends State<Home> {
     {
       try
       {
+        playWheelSound(); // Start the sound when the wheel starts spinning
+
         setState(()
         {
           _isSpinning = true; // Activate dimming
         });
-
-        playWheelSound(); // Start the sound when the wheel starts spinning
+        
         _controller.add(AppCubit.get(context).getDependentRandomIndex());
       }
 
@@ -150,9 +151,9 @@ class _HomeState extends State<Home> {
                                     fontSize: orientation == Orientation.portrait
                                         ? Theme.of(context).textTheme.displayLarge!.fontSize!
                                         : Theme.of(context).textTheme.displayMedium!.fontSize!,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 4,
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Vidaloka',
+                                    letterSpacing: 8,
                                   ),
                                   colors:
                                   [
@@ -179,6 +180,17 @@ class _HomeState extends State<Home> {
                           height: 5,
                         ),
 
+                        Text(
+                          Localization.translate('spin_win'),
+                          style: headlineStyleBuilder(
+                              fontSize: 26
+                          ),
+                        ),
+
+                        const SizedBox(
+                          height: 5,
+                        ),
+
                         Expanded(
                           child: Center(
                             child: myWheel(cubit: cubit),
@@ -189,24 +201,41 @@ class _HomeState extends State<Home> {
                           isRepeatingAnimation: true,
                           repeatForever: true,
                           animatedTexts: [
-                            TypewriterAnimatedText(
+                            // TypewriterAnimatedText(
+                            //
+                            //   speed: Duration(milliseconds: 100),
+                            //   Localization.translate('home_secondary'),
+                            //   textStyle: headlineStyleBuilder(
+                            //       fontSize: orientation == Orientation.portrait
+                            //           ? Theme.of(context).textTheme.headlineMedium!.fontSize!
+                            //           : Theme.of(context).textTheme.headlineSmall!.fontSize!,
+                            //       fontWeight: FontWeight.w600,
+                            //       fontFamily: 'WithoutSans',
+                            //       color: currentColorScheme(context).primary
+                            //   ),
+                            // ),
 
-                              speed: Duration(milliseconds: 100),
+                            ColorizeAnimatedText(
                               Localization.translate('home_secondary'),
                               textStyle: headlineStyleBuilder(
                                   fontSize: orientation == Orientation.portrait
-                                      ? Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium!
-                                      .fontSize!
-                                      : Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall!
-                                      .fontSize!,
+                                      ? Theme.of(context).textTheme.headlineMedium!.fontSize!
+                                      : Theme.of(context).textTheme.headlineSmall!.fontSize!,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'WithoutSans',
-                                  color: currentColorScheme(context).primary
                               ),
+                              colors:
+                              [
+                                HexColor('E6CEE5'),
+                                HexColor('D9B6D8'),
+                                HexColor('CC9ECB'),
+                                HexColor('C085BE'),
+                                HexColor('B36DB1'),
+                                HexColor('FFFFFF'),
+                                HexColor('F2E7F2'),
+
+                              ],
+                              speed: Duration(milliseconds: 1000),
                             ),
                           ]
                         ),
@@ -290,7 +319,8 @@ class _HomeState extends State<Home> {
 
                 _dialog(context: context, cubit: cubit);
               },
-              onFling: () {
+              onFling: ()
+              {
                 spinWheel();
               },
               animateFirst: false,
