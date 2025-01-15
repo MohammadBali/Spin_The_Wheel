@@ -96,15 +96,16 @@ class _HomeState extends State<Home> {
 
   ///Start Spinning Sound
   void playWheelSound() async {
-    if (!_isPlaying) {
-      setState(() {
-        _isPlaying = true;
-      });
-
+    if (!_isPlaying)
+    {
       // Loop the sound
       await _audioPlayer.setReleaseMode(ReleaseMode.release);
       await _audioPlayer.setPlaybackRate(_currentPlaybackSpeed);
       await _audioPlayer.play(AssetSource('audio/wheel.mp3'), volume: 1.0);
+
+      setState(() {
+        _isPlaying = true;
+      });
     }
   }
 
@@ -516,7 +517,7 @@ class _HomeState extends State<Home> {
         _controllerCenterRight.play();
         _controllerCenter.play();
 
-        _audioPlayer.play(AssetSource('audio/win.mp3'));
+        _audioPlayer.play(AssetSource('audio/clapping.mp3'));
         break;
 
       case ItemType.loose:

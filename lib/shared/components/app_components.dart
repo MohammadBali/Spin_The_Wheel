@@ -217,7 +217,7 @@ Future<void> defaultLogExporter({required LogFilter filter, required BuildContex
         ..createSync(recursive: true)
         ..writeAsBytesSync(value.readAsBytesSync());
 
-      print('$path$fileName');
+      debugPrint('$path$fileName');
 
       if(context.mounted)
       {
