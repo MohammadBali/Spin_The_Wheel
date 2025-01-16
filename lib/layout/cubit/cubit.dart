@@ -211,6 +211,7 @@ class AppCubit extends Cubit<AppStates>
     return -1;
   }
 
+
   void setCurrentItem(int index)
   {
     currentItem = items!.items![index];
@@ -454,6 +455,7 @@ class AppCubit extends Cubit<AppStates>
       if(remainingAttempts!=null) 'remainingAttempts':remainingAttempts,
       if(color!=null) 'color':color,
     };
+
     database!.update('items',values, where: 'id = ?', whereArgs: [id]).then((value)
     {
       getDatabase(database);

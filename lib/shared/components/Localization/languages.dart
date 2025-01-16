@@ -63,6 +63,8 @@ const Map<String,String> en={
 
   'home_secondary':'Share The Good Life',
 
+  'home_secondary_two_lines':'Share The\nGood Life',
+
   'result':'Result is:',
 
   'home':'Home',
@@ -260,6 +262,8 @@ const Map<String,String> ar={
   'home_title':'NUA',
 
   'home_secondary':'Share The Good Life',
+
+  'home_secondary_two_lines':'Share The\nGood Life',
 
   'result':'النتيجة هي: ',
 

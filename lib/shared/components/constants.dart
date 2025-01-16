@@ -26,16 +26,19 @@ Set<PointerDeviceKind> dragDevices={PointerDeviceKind.touch, PointerDeviceKind.m
 ///Total Trials
 int totalTrials= 100;
 
-///DateFormat for the logdate style
+///DateFormat for the log date style
 DateFormat logDateFormatter = DateFormat('dd-MM-yyy HH.mm.ss');
 
 ///Default Items to build on the first app run
 List<ItemModel> defaultItems=
 [
-  ItemModel(id:1, label: 'حسم 5%', probability: 0.3, type: ItemType.win, remainingAttempts: (0.3 * totalTrials).round(), color: HexColor('3ac7fd') ),
-  ItemModel(id:2, label: 'حسم 15%', probability: 0.1, type: ItemType.win, remainingAttempts: (0.1 * totalTrials).round(), color: HexColor('0bcee0')),
-  ItemModel(id:3, label: 'دورة أخرى', probability: 0.2, type: ItemType.tie, remainingAttempts: (0.2 * totalTrials).round(), color: HexColor('5dda76')),
-  ItemModel(id:4, label: 'خسارة', probability: 0.4, type: ItemType.loose, remainingAttempts: (0.4 * totalTrials).round(), color: HexColor('fdfc2e')),
+  ItemModel(id:1, label: 'حسم 5%', probability: 0.3, type: ItemType.win, remainingAttempts: (0.3 * totalTrials).round(), color: HexColor('D0EFB1') ),
+  ItemModel(id:2, label: '100 دولار كاش', probability: 0.01, type: ItemType.win, remainingAttempts: (0.01 * totalTrials).round(), color: HexColor('B3D89C')),
+  ItemModel(id:3, label: 'قطعة مجاناً', probability: 0.2, type: ItemType.win, remainingAttempts: (0.2 * totalTrials).round(), color: HexColor('9DC3C2')),
+  ItemModel(id:4, label: 'حظ اوفر', probability: 0.4, type: ItemType.loose, remainingAttempts: (0.4 * totalTrials).round(), color: HexColor('77A6B6')),
+  ItemModel(id:5, label: 'حسم 25%', probability: 0.1, type: ItemType.win, remainingAttempts: (0.1 * totalTrials).round(), color: HexColor('4D7298')),
+  ItemModel(id:6, label: 'حسم 50%', probability: 0.1, type: ItemType.win, remainingAttempts: (0.1 * totalTrials).round(), color: HexColor('F25757')),
+  ItemModel(id:7, label: 'حسم 10%', probability: 0.1, type: ItemType.win, remainingAttempts: (0.1 * totalTrials).round(), color: HexColor('F2E863')),
 ];
 
 ///Dimming Value for Screen
