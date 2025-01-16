@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    pool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.notification));
+    pool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
 
     preloadAudio();
 
@@ -155,160 +155,297 @@ class _HomeState extends State<Home> {
             builder: (context, orientation) => ConditionalBuilder(
                   condition: cubit.items != null && cubit.items!.items!.isNotEmpty,
 
-                  builder: (context) => SafeArea(
-                    child: Column(
-                      children: [
-                        ColorFiltered(
-                          colorFilter: ColorFilter.mode(
-                            cubit.isDimmed ? dimColor.withOpacity(dimValue) : Colors.transparent,
-                            BlendMode.srcATop,
-                          ),
+                  builder: (context)
+                  {
+                    if(orientation == Orientation.portrait)
+                    {
+                      return SafeArea(
+                        child: Column(
+                          children: [
+                            ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                cubit.isDimmed ? dimColor.withOpacity(dimValue) : Colors.transparent,
+                                BlendMode.srcATop,
+                              ),
 
-                          child: GestureDetector(
-                            child: AnimatedTextKit(
-                              isRepeatingAnimation: true,
-                              repeatForever: true,
-                              animatedTexts:
-                              [
-                                ColorizeAnimatedText(
-                                    Localization.translate('home_title'),
-                                    textStyle: TextStyle(
-                                      fontSize: orientation == Orientation.portrait
-                                          ? Theme.of(context).textTheme.displayLarge!.fontSize!
-                                          : Theme.of(context).textTheme.displayMedium!.fontSize!,
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Vidaloka',
-                                      letterSpacing: 8,
+                              child: GestureDetector(
+                                child: AnimatedTextKit(
+                                  isRepeatingAnimation: true,
+                                  repeatForever: true,
+                                  animatedTexts:
+                                  [
+                                    ColorizeAnimatedText(
+                                      Localization.translate('home_title'),
+                                      textStyle: TextStyle(
+                                        fontSize: orientation == Orientation.portrait
+                                            ? Theme.of(context).textTheme.displayLarge!.fontSize!
+                                            : Theme.of(context).textTheme.displayMedium!.fontSize!,
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Vidaloka',
+                                        letterSpacing: 8,
+                                      ),
+                                      colors: cubit.isDimmed?
+                                      [
+                                        HexColor('FFFFFF').withOpacity(0.9),
+                                        HexColor('F2E7F2').withOpacity(0.9),
+                                        HexColor('E6CEE5').withOpacity(0.9),
+                                        HexColor('D9B6D8').withOpacity(0.9),
+                                        HexColor('CC9ECB').withOpacity(0.9),
+                                        HexColor('C085BE').withOpacity(0.9),
+                                        HexColor('B36DB1').withOpacity(0.9),
+                                      ]:
+                                      [
+                                        HexColor('FFFFFF'),
+                                        HexColor('F2E7F2'),
+                                        HexColor('E6CEE5'),
+                                        HexColor('D9B6D8'),
+                                        HexColor('CC9ECB'),
+                                        HexColor('C085BE'),
+                                        HexColor('B36DB1'),
+                                      ],
+                                      speed: Duration(seconds: 3),
                                     ),
-                                    colors: cubit.isDimmed?
-                                    [
-                                      HexColor('FFFFFF').withOpacity(0.9),
-                                      HexColor('F2E7F2').withOpacity(0.9),
-                                      HexColor('E6CEE5').withOpacity(0.9),
-                                      HexColor('D9B6D8').withOpacity(0.9),
-                                      HexColor('CC9ECB').withOpacity(0.9),
-                                      HexColor('C085BE').withOpacity(0.9),
-                                      HexColor('B36DB1').withOpacity(0.9),
-                                    ]:
-                                    [
-                                      HexColor('FFFFFF'),
-                                      HexColor('F2E7F2'),
-                                      HexColor('E6CEE5'),
-                                      HexColor('D9B6D8'),
-                                      HexColor('CC9ECB'),
-                                      HexColor('C085BE'),
-                                      HexColor('B36DB1'),
-                                    ],
-                                  speed: Duration(seconds: 3),
-                                ),
-                              ],
+                                  ],
 
+                                ),
+
+                                onDoubleTap: () {
+                                  cubit.changeIsTabBarShown();
+                                },
+                              ),
                             ),
 
-                            onDoubleTap: () {
-                              cubit.changeIsTabBarShown();
-                            },
-                          ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+
+                            Text(
+                              Localization.translate('spin_win'),
+                              style: headlineStyleBuilder(
+                                fontSize: 26,
+
+                              ),
+                            ),
+
+                            const SizedBox(
+                              height: 5,
+                            ),
+
+                            Expanded(
+                              child: Center(
+                                child: myWheel(cubit: cubit),
+                              ),
+                            ),
+
+                            ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                cubit.isDimmed ? dimColor.withOpacity(dimValue) : Colors.transparent,
+                                BlendMode.srcATop,
+                              ),
+
+                              child: AnimatedTextKit(
+                                  isRepeatingAnimation: true,
+                                  repeatForever: true,
+                                  animatedTexts: [
+                                    // TypewriterAnimatedText(
+                                    //
+                                    //   speed: Duration(milliseconds: 100),
+                                    //   Localization.translate('home_secondary'),
+                                    //   textStyle: headlineStyleBuilder(
+                                    //       fontSize: orientation == Orientation.portrait
+                                    //           ? Theme.of(context).textTheme.headlineMedium!.fontSize!
+                                    //           : Theme.of(context).textTheme.headlineSmall!.fontSize!,
+                                    //       fontWeight: FontWeight.w600,
+                                    //       fontFamily: 'WithoutSans',
+                                    //       color: currentColorScheme(context).primary
+                                    //   ),
+                                    // ),
+
+                                    ColorizeAnimatedText(
+                                      Localization.translate('home_secondary'),
+                                      textStyle: headlineStyleBuilder(
+                                        fontSize: orientation == Orientation.portrait
+                                            ? Theme.of(context).textTheme.headlineMedium!.fontSize!
+                                            : Theme.of(context).textTheme.headlineSmall!.fontSize!,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'WithoutSans',
+                                      ),
+                                      colors: cubit.isDimmed?
+                                      [
+                                        HexColor('E6CEE5').withOpacity(0.9),
+                                        HexColor('D9B6D8').withOpacity(0.9),
+                                        HexColor('CC9ECB').withOpacity(0.9),
+                                        HexColor('C085BE').withOpacity(0.9),
+                                        HexColor('B36DB1').withOpacity(0.9),
+                                        HexColor('FFFFFF').withOpacity(0.9),
+                                        HexColor('F2E7F2').withOpacity(0.9),
+
+                                      ]:
+                                      [
+                                        HexColor('E6CEE5'),
+                                        HexColor('D9B6D8'),
+                                        HexColor('CC9ECB'),
+                                        HexColor('C085BE'),
+                                        HexColor('B36DB1'),
+                                        HexColor('FFFFFF'),
+                                        HexColor('F2E7F2'),
+                                      ],
+                                      speed: Duration(milliseconds: 1000),
+                                    ),
+                                  ]
+                              ),
+                            ),
+
+                            if (orientation == Orientation.portrait &&
+                                cubit.shuffleColors == true)
+                              const SizedBox(
+                                height: 40,
+                              ),
+
+
+                            // const Spacer(),
+                            //
+                            // defaultButton(
+                            //   type: ButtonType.elevated,
+                            //   onPressed: spinWheel,
+                            //   message: Localization.translate('spin'),
+                            // ),
+                          ],
                         ),
-
-                        const SizedBox(
-                          height: 5,
-                        ),
-
-                        Text(
-                          Localization.translate('spin_win'),
-                          style: headlineStyleBuilder(
-                            fontSize: 26,
-
-                          ),
-                        ),
-
-                        const SizedBox(
-                          height: 5,
-                        ),
-
-                        Expanded(
-                          child: Center(
-                            child: myWheel(cubit: cubit),
-                          ),
-                        ),
-
-                        ColorFiltered(
-                          colorFilter: ColorFilter.mode(
-                            cubit.isDimmed ? dimColor.withOpacity(dimValue) : Colors.transparent,
-                            BlendMode.srcATop,
-                          ),
-
-                          child: AnimatedTextKit(
-                              isRepeatingAnimation: true,
-                              repeatForever: true,
-                              animatedTexts: [
-                                // TypewriterAnimatedText(
-                                //
-                                //   speed: Duration(milliseconds: 100),
-                                //   Localization.translate('home_secondary'),
-                                //   textStyle: headlineStyleBuilder(
-                                //       fontSize: orientation == Orientation.portrait
-                                //           ? Theme.of(context).textTheme.headlineMedium!.fontSize!
-                                //           : Theme.of(context).textTheme.headlineSmall!.fontSize!,
-                                //       fontWeight: FontWeight.w600,
-                                //       fontFamily: 'WithoutSans',
-                                //       color: currentColorScheme(context).primary
-                                //   ),
-                                // ),
-
-                                ColorizeAnimatedText(
-                                  Localization.translate('home_secondary'),
-                                  textStyle: headlineStyleBuilder(
-                                    fontSize: orientation == Orientation.portrait
-                                        ? Theme.of(context).textTheme.headlineMedium!.fontSize!
-                                        : Theme.of(context).textTheme.headlineSmall!.fontSize!,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'WithoutSans',
-                                  ),
-                                  colors: cubit.isDimmed?
-                                  [
-                                    HexColor('E6CEE5').withOpacity(0.9),
-                                    HexColor('D9B6D8').withOpacity(0.9),
-                                    HexColor('CC9ECB').withOpacity(0.9),
-                                    HexColor('C085BE').withOpacity(0.9),
-                                    HexColor('B36DB1').withOpacity(0.9),
-                                    HexColor('FFFFFF').withOpacity(0.9),
-                                    HexColor('F2E7F2').withOpacity(0.9),
-
-                                  ]:
-                                  [
-                                    HexColor('E6CEE5'),
-                                    HexColor('D9B6D8'),
-                                    HexColor('CC9ECB'),
-                                    HexColor('C085BE'),
-                                    HexColor('B36DB1'),
-                                    HexColor('FFFFFF'),
-                                    HexColor('F2E7F2'),
-                                  ],
-                                  speed: Duration(milliseconds: 1000),
+                      );
+                    }
+                    
+                    else
+                    {
+                      return SafeArea(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  cubit.isDimmed ? dimColor.withOpacity(dimValue) : Colors.transparent,
+                                  BlendMode.srcATop,
                                 ),
-                              ]
+                          
+                                child: GestureDetector(
+                                  child: AnimatedTextKit(
+                                    isRepeatingAnimation: true,
+                                    repeatForever: true,
+                                    animatedTexts:
+                                    [
+                                      ColorizeAnimatedText(
+                                        Localization.translate('home_title'),
+                                        textStyle: TextStyle(
+                                          fontSize: orientation == Orientation.portrait
+                                              ? Theme.of(context).textTheme.displayLarge!.fontSize!
+                                              : Theme.of(context).textTheme.displayMedium!.fontSize!,
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Vidaloka',
+                                          letterSpacing: 8,
+                                        ),
+                                        colors: cubit.isDimmed?
+                                        [
+                                          HexColor('FFFFFF').withOpacity(0.9),
+                                          HexColor('F2E7F2').withOpacity(0.9),
+                                          HexColor('E6CEE5').withOpacity(0.9),
+                                          HexColor('D9B6D8').withOpacity(0.9),
+                                          HexColor('CC9ECB').withOpacity(0.9),
+                                          HexColor('C085BE').withOpacity(0.9),
+                                          HexColor('B36DB1').withOpacity(0.9),
+                                        ]:
+                                        [
+                                          HexColor('FFFFFF'),
+                                          HexColor('F2E7F2'),
+                                          HexColor('E6CEE5'),
+                                          HexColor('D9B6D8'),
+                                          HexColor('CC9ECB'),
+                                          HexColor('C085BE'),
+                                          HexColor('B36DB1'),
+                                        ],
+                                        speed: Duration(seconds: 3),
+                                      ),
+                                    ],
+                          
+                                  ),
+                          
+                                  onDoubleTap: () {
+                                    cubit.changeIsTabBarShown();
+                                  },
+                                ),
+                              ),
+                          
+                              const SizedBox(
+                                height: 5,
+                              ),
+                          
+                              Text(
+                                Localization.translate('spin_win'),
+                                style: headlineStyleBuilder(
+                                  fontSize: 26,
+                          
+                                ),
+                              ),
+                          
+                              const SizedBox(
+                                height: 5,
+                              ),
+                          
+                              Center(
+                                child: myWheel(cubit: cubit),
+                              ),
+                          
+                              ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  cubit.isDimmed ? dimColor.withOpacity(dimValue) : Colors.transparent,
+                                  BlendMode.srcATop,
+                                ),
+                          
+                                child: AnimatedTextKit(
+                                    isRepeatingAnimation: true,
+                                    repeatForever: true,
+                                    animatedTexts: [
+                          
+                                      ColorizeAnimatedText(
+                                        Localization.translate('home_secondary'),
+                                        textStyle: headlineStyleBuilder(
+                                          fontSize: orientation == Orientation.portrait
+                                              ? Theme.of(context).textTheme.headlineMedium!.fontSize!
+                                              : Theme.of(context).textTheme.headlineSmall!.fontSize!,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'WithoutSans',
+                                        ),
+                                        colors: cubit.isDimmed?
+                                        [
+                                          HexColor('E6CEE5').withOpacity(0.9),
+                                          HexColor('D9B6D8').withOpacity(0.9),
+                                          HexColor('CC9ECB').withOpacity(0.9),
+                                          HexColor('C085BE').withOpacity(0.9),
+                                          HexColor('B36DB1').withOpacity(0.9),
+                                          HexColor('FFFFFF').withOpacity(0.9),
+                                          HexColor('F2E7F2').withOpacity(0.9),
+                          
+                                        ]:
+                                        [
+                                          HexColor('E6CEE5'),
+                                          HexColor('D9B6D8'),
+                                          HexColor('CC9ECB'),
+                                          HexColor('C085BE'),
+                                          HexColor('B36DB1'),
+                                          HexColor('FFFFFF'),
+                                          HexColor('F2E7F2'),
+                                        ],
+                                        speed: Duration(milliseconds: 1000),
+                                      ),
+                                    ]
+                                ),
+                              ),
+
+                            ],
                           ),
                         ),
-
-                        if (orientation == Orientation.portrait &&
-                            cubit.shuffleColors == true)
-                          const SizedBox(
-                            height: 40,
-                          ),
-
-
-                        // const Spacer(),
-                        //
-                        // defaultButton(
-                        //   type: ButtonType.elevated,
-                        //   onPressed: spinWheel,
-                        //   message: Localization.translate('spin'),
-                        // ),
-                      ],
-                    ),
-                  ),
+                      );
+                    }
+                  },
 
                   fallback: (context) =>
                       Center(child: defaultProgressIndicator(context: context)),
@@ -328,8 +465,7 @@ class _HomeState extends State<Home> {
 
       // Calculate sizes dynamically based on available space
       double wheelSize = maxSize * 0.9; // 90% of the available width
-      double borderSize = wheelSize *
-          1.06; // Border image slightly larger than the wheel  was wheelSize * 1.3
+      double borderSize = wheelSize * 1.06; // Border image slightly larger than the wheel  was wheelSize * 1.3
 
       return Stack(
         alignment: Alignment.center,
