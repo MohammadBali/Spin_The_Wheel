@@ -332,7 +332,7 @@ class _AllItemsState extends State<AllItems> {
                         TextButton(
                             onPressed: ()
                             {
-                              cubit.deleteDatabase(id: item.id!);
+                              cubit.deleteFromDatabase(id: item.id!);
                               Navigator.of(dialogContext).pop(true);
                             },
                             child: Text(Localization.translate('exit_app_yes'))

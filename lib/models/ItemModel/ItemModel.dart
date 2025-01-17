@@ -69,7 +69,7 @@ class ItemModel
   void initializeRemainingAttempts()
   {
     // Allocate remaining attempts based on probability
-    remainingAttempts = (probability! * totalTrials).round();
+    remainingAttempts = (probability! * totalTrials);
   }
 
   ItemModel({required this.id, required this.label, required this.probability, required this.type, required this.remainingAttempts, required this.color});

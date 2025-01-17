@@ -143,7 +143,7 @@ class AppCubit extends Cubit<AppStates>
 
   ///Dependent Item Choosing
   ///It relies on the remaining attempts of each item
-  int getDependentRandomIndex() {
+  int getDependentRandomIndex2() {
     try
     {
       emit(AppSpinWheelLoadingState());
@@ -211,6 +211,86 @@ class AppCubit extends Cubit<AppStates>
     return -1;
   }
 
+
+  ///Dependent Item Choosing, with scaling factor
+  int getDependentRandomIndex() {
+    try
+    {
+      emit(AppSpinWheelLoadingState());
+
+      // Calculate the total remaining attempts
+      double totalRemaining = items!.items!.fold(0, (sum, item) => sum + item.remainingAttempts!.toDouble());
+
+      //Reset the remaining attempts if total remaining is 0
+      if (totalRemaining == 0.0)
+      {
+        emit(AppSpinWheelNoMoreAttemptsState());
+
+        for (var item in items!.items!)
+        {
+          item.initializeRemainingAttempts();
+          updateDatabase(id: item.id!, remainingAttempts: item.remainingAttempts);
+        }
+
+        totalRemaining = items!.items!.fold(0, (sum, item) => sum + item.remainingAttempts!.toDouble());
+
+        if (totalRemaining == 0.0) {
+          throw Exception("No items with remaining attempts after reset.");
+        }
+      }
+
+      //Scaling the items with weights so we can measure the fractions
+      List<double> scaledWeights = items!.items!.map((item) => item.remainingAttempts!.toDouble() * scaleFactor).toList();
+
+      // Calculate total weight for random selection
+      double totalWeight = scaledWeights.reduce((a, b) => a + b);
+
+      // Random selection based on remaining attempts
+      final random = Random();
+      double randValue = random.nextDouble() * totalWeight;
+      double cumulativeWeight = 0.0;
+
+      for (int i = 0; i < items!.items!.length; i++) {
+        cumulativeWeight += scaledWeights[i];
+        if (randValue < cumulativeWeight)
+        {
+          ItemModel item = items!.items![i];
+
+          // Update remaining attempts for the selected item
+          item.remainingAttempts = (item.remainingAttempts!.toDouble() - 1).clamp(0.0, totalRemaining);
+
+          updateDatabase(id: item.id!, remainingAttempts: item.remainingAttempts);
+
+          emit(AppSpinWheelSuccessState());
+          setCurrentItem(i);
+
+          logData(
+            data: 'The Wheel Was Spent with item: ${item.toString()}',
+            level: LogLevel.INFO,
+            methodName: 'getDependentRandomIndex',
+          );
+
+          return i;
+        }
+      }
+
+      throw Exception("Failed to select an item based on weights.");
+    } catch (e, stackTrace)
+    {
+      debugPrint('ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}');
+
+      emit(AppSpinWheelErrorState(message: 'ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}'));
+
+      logData(
+        data: 'ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}',
+        level: LogLevel.ERROR,
+        exception: e,
+        stacktrace: stackTrace,
+        methodName: 'getDependentRandomIndex',
+      );
+    }
+    return -1;
+  }
 
   void setCurrentItem(int index)
   {
@@ -394,10 +474,10 @@ class AppCubit extends Cubit<AppStates>
     });
   }
 
-  ///*Insert Into The Tasks Table
-  ///[label] Item Label
-  ///[probability] Occurring probability
-  ///[type] It's ItemType, winning, loosing, etc...
+  ///* Insert Into The Tasks Table
+  ///* [label] Item Label
+  ///* [probability] Occurring probability
+  ///* [type] It's ItemType, winning, loosing, etc...
   void insertIntoDatabase({
     required String label,
     required num probability,
@@ -443,7 +523,9 @@ class AppCubit extends Cubit<AppStates>
     });
   }
 
-
+  ///* Update in Database
+  ///* [id] required ID to update
+  ///Provide any fields to be updated
   void updateDatabase({ItemType? type, String? label, num? probability, num? remainingAttempts, String? color, required int id, bool showSnack=false,}) async
   {
     emit(AppUpdateDatabaseLoadingState());
@@ -483,7 +565,9 @@ class AppCubit extends Cubit<AppStates>
     });
   }
 
-  void deleteDatabase({required int id}) async
+  ///* Remove from Database
+  ///* [id] required ID to delete
+  void deleteFromDatabase({required int id}) async
   {
     emit(AppDeleteFromDatabaseLoadingState());
 

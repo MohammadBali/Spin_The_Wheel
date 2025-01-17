@@ -308,11 +308,11 @@ class _HomeState extends State<Home> {
 
                             //const Spacer(),
 
-                            defaultButton(
-                              type: ButtonType.elevated,
-                              onPressed: (){spinWheel(cubit: cubit);},
-                              message: Localization.translate('spin'),
-                            ),
+                            // defaultButton(
+                            //   type: ButtonType.elevated,
+                            //   onPressed: (){spinWheel(cubit: cubit);},
+                            //   message: Localization.translate('spin'),
+                            // ),
                           ],
                         ),
                       );
@@ -429,11 +429,11 @@ class _HomeState extends State<Home> {
                             ),
                           ),
 
-                          defaultButton(
-                            type: ButtonType.elevated,
-                            onPressed: (){spinWheel(cubit: cubit);},
-                            message: Localization.translate('spin'),
-                          ),
+                          // defaultButton(
+                          //   type: ButtonType.elevated,
+                          //   onPressed: (){spinWheel(cubit: cubit);},
+                          //   message: Localization.translate('spin'),
+                          // ),
                         ],
                       );
                     }
