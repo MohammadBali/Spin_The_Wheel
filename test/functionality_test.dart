@@ -18,26 +18,28 @@ List<ItemModel> testItems=
 
 void main()
 {
-
-  test('dependent_test', ()
+  group('logic_test',()
   {
-    for(int i=0; i<1000; i++)
+    test('dependent_trial_test', ()
     {
+      for(int i=0; i<1000; i++)
+      {
 
-      int index = getDependentRandomIndexTest();
+        int index = getDependentRandomIndexTest();
 
-      expect(index, isA<int>());
-    }
+        expect(index, isA<int>());
+      }
 
-    for(int i=0; i<7;i++)
-    {
-      print('After 1000 Turn, Checking values...');
-      expect(testItems[i].remainingAttempts, 0.0);
-      print('Expecting Item:${testItems[i].label} to have 0 Remaining Attempts, Value is: ${testItems[i].remainingAttempts} => Correct');
+      for(int i=0; i<7;i++)
+      {
+        print('After 1000 Turn, Checking values...');
+        expect(testItems[i].remainingAttempts, 0.0);
+        print('Expecting Item:${testItems[i].label} to have 0 Remaining Attempts, Value is: ${testItems[i].remainingAttempts} => Correct');
 
-      print('---------------------');
-    }
+        print('---------------------');
+      }
 
+    });
   });
 }
 
@@ -99,10 +101,9 @@ int getDependentRandomIndexTest() {
     }
 
     throw Exception("Failed to select an item based on weights.");
-  } catch (e, stackTrace)
+  } catch (e)
   {
     print('ERROR WHILE GETTING DEPENDENT RANDOM INDEX..., ${e.toString()}');
-
   }
   return -1;
 }

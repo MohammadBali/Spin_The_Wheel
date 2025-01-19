@@ -310,38 +310,38 @@ Widget defaultProgressIndicator({required BuildContext context, double? value, b
 ///* Use it with TabBarView and pass a ~Controller to handle changes
 ///* Or Use a DefaultTabBarController
 ///* Refer to https://api.flutter.dev/flutter/material/TabBar-class.html
-PreferredSizeWidget defaultTabBar(
-{
-  required bool isPrimary,
-  bool isScrollable=false,
+  PreferredSizeWidget defaultTabBar(
+  {
+    required bool isPrimary,
+    bool isScrollable=false,
 
-  required List<Widget> tabs,
-  required BuildContext context,
-  TabController? controller,
-  Color? dividerColor,
+    required List<Widget> tabs,
+    required BuildContext context,
+    TabController? controller,
+    Color? dividerColor,
 
-  ScrollPhysics physics= const BouncingScrollPhysics(),
-  void Function(int)? onTap,
+    ScrollPhysics physics= const BouncingScrollPhysics(),
+    void Function(int)? onTap,
 
 
 
-})=>isPrimary
-    ?TabBar(
-      controller: controller,
-      tabs: tabs,
-      physics: physics,
-      isScrollable: isScrollable,
-      onTap: onTap?? (index){AppCubit.get(context).changeTabBar(index);},
-      dividerColor: dividerColor,
-)
-    :TabBar.secondary(
-      controller: controller,
-      tabs: tabs,
-      physics: physics,
-      isScrollable: isScrollable,
-      dividerColor: dividerColor,
-      onTap: onTap?? (index){AppCubit.get(context).changeTabBar(index);},
-);
+  })=>isPrimary
+      ?TabBar(
+        controller: controller,
+        tabs: tabs,
+        physics: physics,
+        isScrollable: isScrollable,
+        onTap: onTap,
+        dividerColor: dividerColor,
+  )
+      :TabBar.secondary(
+        controller: controller,
+        tabs: tabs,
+        physics: physics,
+        isScrollable: isScrollable,
+        dividerColor: dividerColor,
+        onTap: onTap,
+  );
 
 //------------------------------------------------------------------------------------------\\
 

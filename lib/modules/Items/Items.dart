@@ -41,7 +41,18 @@ class _AllItemsState extends State<AllItems> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,AppStates>(
-      listener: (context,state){},
+      listener: (context,state)
+      {
+        if (state is AppResetAttemptsSuccessState)
+        {
+          snackBarBuilder(context: context, message: Localization.translate('success'));
+        }
+        
+        if (state is AppResetAttemptsErrorState)
+        {
+          snackBarBuilder(context: context, message: state.message);
+        }
+      },
       builder: (context,state)
       {
         var cubit = AppCubit.get(context);
@@ -49,7 +60,16 @@ class _AllItemsState extends State<AllItems> {
         return Directionality(
           textDirection: appDirectionality(),
           child: Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              actions:
+              [
+                IconButton(
+                  icon: Icon(Icons.restart_alt_outlined),
+                  onPressed: (){_resetDialog(context,cubit);},
+                  tooltip: Localization.translate('reset'),
+                ),
+              ],
+            ),
             body: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -401,5 +421,52 @@ class _AllItemsState extends State<AllItems> {
           );
         }
     );
+  }
+
+  ///Reset Items Remaining Attempts
+  void _resetDialog(BuildContext context, AppCubit cubit)
+  {
+    showDialog(context: context, builder: (dialogContext)
+    {
+      return defaultAlertDialog(
+          context: dialogContext,
+          title: Localization.translate('reset'),
+          content: SingleChildScrollView(
+            child: Directionality(
+              textDirection: appDirectionality(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children:
+                [
+                  Text(Localization.translate('reset_secondary'), ),
+
+                  const SizedBox(height: 5,),
+
+                  Row(
+                    children:
+                    [
+                      TextButton(
+                          onPressed: ()
+                          {
+                            cubit.resetItemsAttempts();
+                            Navigator.of(dialogContext).pop(false);
+                          },
+                          child: Text(Localization.translate('exit_app_yes'))
+                      ),
+
+                      const Spacer(),
+
+                      TextButton(
+                        onPressed: ()=> Navigator.of(dialogContext).pop(false),
+                        child: Text(Localization.translate('exit_app_no')),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+      );
+    });
   }
 }

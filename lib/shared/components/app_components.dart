@@ -144,6 +144,7 @@ void logData({
   String? methodName,
   dynamic exception,
   StackTrace? stacktrace,
+  Enum? dataLogType,
 })
 {
   if(!kIsWeb)
@@ -158,6 +159,7 @@ void logData({
       methodName: methodName,
       exception: exception,
       stacktrace: stacktrace,
+      dataLogType: dataLogType
     );
   }
 }

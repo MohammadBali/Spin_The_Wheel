@@ -65,6 +65,8 @@ const Map<String,String> en={
 
   'home_secondary_two_lines':'Share The\nGood Life',
 
+  'enter_pass':'Enter Password',
+
   'result':'Result is:',
 
   'home':'Home',
@@ -193,6 +195,11 @@ const Map<String,String> en={
 
   'no_more_spins':'Reinitializing Spins to defaults....',
 
+  //--------------------------------------------------------------------\\
+
+  'reset':'Reset Items',
+
+  'reset_secondary':'Are you sure you want to reset items remaining attempts?',
 
 };
 
@@ -264,6 +271,8 @@ const Map<String,String> ar={
   'home_secondary':'Share The Good Life',
 
   'home_secondary_two_lines':'Share The\nGood Life',
+
+  'enter_pass':'ادخل كلمة السر',
 
   'result':'النتيجة هي: ',
 
@@ -394,5 +403,11 @@ const Map<String,String> ar={
   'result_title_loose':'حظاً أوفر',
 
   'no_more_spins':'جاري إعادة التعيين...',
+
+  //--------------------------------------------------------------------\\
+
+  'reset':'إعادة الضبط',
+
+  'reset_secondary':'هل تريد إعادة ضبط العناصر؟ هذا سوف يعيد المحاولات المتبقية لقيمتها الافتراضية',
 
 };

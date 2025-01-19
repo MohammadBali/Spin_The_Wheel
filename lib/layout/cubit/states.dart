@@ -110,3 +110,16 @@ class AppSetCurrentColorChoiceState extends AppStates{}
 
 class AppAlterItemState extends AppStates{}
 
+//------------------------------------
+
+//RESET ITEMS ATTEMPTS
+
+class AppResetAttemptsSuccessState extends AppStates{}
+
+class AppResetAttemptsErrorState extends AppStates
+{
+  final String message;
+
+  AppResetAttemptsErrorState({required this.message});
+}
+

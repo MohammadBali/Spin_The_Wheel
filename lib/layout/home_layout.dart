@@ -10,6 +10,7 @@ class HomeLayout extends StatefulWidget {
 class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
 {
   late TabController tabController;
+  TextEditingController passController = TextEditingController();
   var formKey=GlobalKey<FormState>();
 
   @override
@@ -17,6 +18,14 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
   {
     super.initState();
     tabController = TabController(length: AppCubit.get(context).tabBarWidgets.length, vsync: this);
+  }
+
+  @override
+  void dispose()
+  {
+    passController.dispose();
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -91,7 +100,20 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
                           text: Localization.translate('settings'),
                         ),
 
-                      ]
+                      ],
+
+                      onTap: (index)
+                      {
+                        cubit.changeTabBar(index);
+                        // if(cubit.tabBarIndex != index && index ==1)
+                        // {
+                        //   _showPasswordDialog(context, cubit, index);
+                        // }
+                        // else
+                        // {
+                        //   cubit.changeTabBar(index);
+                        // }
+                      },
                   ),
                   flexibleSpace: Stack(
                     children: [
@@ -176,6 +198,86 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
           )),
         );
       },
+
+    );
+  }
+
+  ///Prepare a Dialog to enter password, if correct => Head to Settings Page
+  void _showPasswordDialog(BuildContext context, AppCubit cubit, int index)
+  {
+    showDialog(
+      context: context,
+      builder: (dialogContext)=>defaultAlertDialog(
+        context: dialogContext,
+        title: Localization.translate('enter_pass'),
+        content: StatefulBuilder(
+            builder: (dialogContext, setState)
+            {
+              return SingleChildScrollView(
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children:
+                      [
+                        Directionality(
+                          textDirection: appDirectionality(),
+                          child: defaultTextFormField(
+                            controller: passController,
+                            keyboard: TextInputType.text,
+                            label: Localization.translate('password_login_tfm'),
+                            prefix: Icons.password_outlined,
+                            isObscure: true,
+                            contentPadding: 12,
+                            validate: (value)
+                            {
+                              if(value!.isEmpty)
+                              {
+                                return Localization.translate('password_login_tfm_error');
+                              }
+
+                              if(value != settingsPassword)
+                              {
+                                return Localization.translate('login_error_toast');
+                              }
+
+                              return null;
+                            },
+
+                          ),
+                        ),
+
+                        const SizedBox(height: 15,),
+
+                        Center(
+                          child: defaultButton(
+                              message: Localization.translate('submit_button'),
+                              type: ButtonType.elevated,
+                              onPressed: ()
+                              {
+                                if(formKey.currentState!.validate())
+                                {
+                                  passController.text='';
+
+                                  Navigator.of(dialogContext).pop();
+                                  cubit.changeTabBar(index);
+                                }
+
+                                else
+                                {
+                                  passController.text='';
+                                }
+
+                              }
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              );
+            }
+        ),
+      ),
+      barrierDismissible: true,
 
     );
   }
