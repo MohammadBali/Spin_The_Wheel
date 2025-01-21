@@ -33,7 +33,7 @@ DateFormat logDateFormatter = DateFormat('dd-MM-yyy HH.mm.ss');
 List<ItemModel> defaultItems=
 [
   ItemModel(id:1, label: 'حسم 5%', probability: 0.3, type: ItemType.win, remainingAttempts: (0.3 * totalTrials), color: HexColor('D0EFB1') ),
-  ItemModel(id:2, label: '100 دولار كاش', probability: 0, type: ItemType.win, remainingAttempts: (0 * totalTrials), color: HexColor('B3D89C')),
+  ItemModel(id:2, label: '100 \$ كاش', probability: 0, type: ItemType.win, remainingAttempts: (0 * totalTrials), color: HexColor('B3D89C')),
   ItemModel(id:3, label: 'قطعة مجاناً', probability: 0.01, type: ItemType.win, remainingAttempts: (0.01 * totalTrials), color: HexColor('9DC3C2')),
   ItemModel(id:4, label: 'حظ اوفر', probability: 0.3, type: ItemType.loose, remainingAttempts: (0.3 * totalTrials), color: HexColor('77A6B6')),
   ItemModel(id:5, label: 'حسم 25%', probability: 0.1, type: ItemType.win, remainingAttempts: (0.1 * totalTrials), color: HexColor('4D7298')),

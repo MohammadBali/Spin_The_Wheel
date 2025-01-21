@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget
   Widget build(BuildContext context) {
     //Start the bloc provider which creates our BLoC
     return BlocProvider(
-      create: (BuildContext context)=> AppCubit()..changeTheme(themeFromState: isDark)..createDatabase(),
+      create: (BuildContext context)=> AppCubit()..changeTheme(themeFromState: isDark)..createDatabase()..loadAudioAssets(),
       //Using Consumer to listen to any new changes and rebuild depending on that
       child: BlocConsumer<AppCubit,AppStates>(
         listener: (context,state){},

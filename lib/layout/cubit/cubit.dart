@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/services.dart';
 import 'package:my_logger/core/constants.dart';
+import 'package:soundpool/soundpool.dart';
 import 'package:spinning_wheel/models/ItemModel/ItemModel.dart';
 import 'package:spinning_wheel/modules/Home/Home.dart';
 import 'package:spinning_wheel/modules/Settings/Settings.dart';
@@ -364,6 +366,39 @@ class AppCubit extends Cubit<AppStates>
 
     emit(AppSetCurrentColorChoiceState());
   }
+
+
+  //--------------------------------------------------\\
+
+  //POOL SOUND
+
+  Soundpool pool= Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
+
+  late int spinId;
+  late int spinStream;
+
+  late int winId;
+  late int winStream;
+
+  late int looseId;
+  late int looseStream;
+
+  ///Loads the Audio Assets like spinId, winId and looseId
+  void loadAudioAssets() async
+  {
+    try {
+      spinId = await rootBundle.load('assets/audio/wheel.mp3').then((soundData)=> pool.load(soundData));
+      winId = await rootBundle.load('assets/audio/clapping.mp3').then((soundData)=> pool.load(soundData));
+      looseId = await rootBundle.load('assets/audio/loose.mp3').then((soundData)=> pool.load(soundData));
+
+      emit(AppLoadAudioAssetsSuccessState());
+    }
+    catch (e)
+    {
+      emit(AppLoadAudioAssetsErrorState(message: e.toString()));
+    }
+  }
+
   //--------------------------------------------------\\
 
   ///All Items

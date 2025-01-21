@@ -104,15 +104,16 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
 
                       onTap: (index)
                       {
-                        cubit.changeTabBar(index);
-                        // if(cubit.tabBarIndex != index && index ==1)
-                        // {
-                        //   _showPasswordDialog(context, cubit, index);
-                        // }
-                        // else
-                        // {
-                        //   cubit.changeTabBar(index);
-                        // }
+                        //cubit.changeTabBar(index);
+                        
+                        if(cubit.tabBarIndex != index && index ==1)
+                        {
+                          _showPasswordDialog(context, cubit, index);
+                        }
+                        else
+                        {
+                          cubit.changeTabBar(index);
+                        }
                       },
                   ),
                   flexibleSpace: Stack(
@@ -123,7 +124,7 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
                             image: AssetImage(
                               cubit.isDarkTheme
                                   ?'assets/images/background/chinese.png'
-                                  :'assets/images/background/points.png',
+                                  :'assets/images/background/sky.jpg',
                             ),
                             fit: BoxFit.cover,
                             opacity: 0.9,
@@ -155,7 +156,7 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
                       image: AssetImage(
                         cubit.isDarkTheme
                             ?'assets/images/background/chinese.png'
-                            :'assets/images/background/points.png',
+                            :'assets/images/background/sky.jpg',
                       ),
                       fit: BoxFit.cover,
                       opacity: 0.9,

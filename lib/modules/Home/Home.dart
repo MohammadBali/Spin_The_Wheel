@@ -26,16 +26,16 @@ class _HomeState extends State<Home> {
   Stream<int> get myStream => _controller.stream;
   bool _isSpinning = false; // Track spinning state
 
-  late Soundpool pool;
-
-  late int spinId;
-  late int spinStream;
-
-  late int winId;
-  late int winStream;
-
-  late int looseId;
-  late int looseStream;
+  // late Soundpool pool;
+  //
+  // late int spinId;
+  // late int spinStream;
+  //
+  // late int winId;
+  // late int winStream;
+  //
+  // late int looseId;
+  // late int looseStream;
 
   bool _isPlaying = false;
 
@@ -44,20 +44,20 @@ class _HomeState extends State<Home> {
   late ConfettiController _controllerCenter;
 
 
-  ///Set Audio Assets
-  void preloadAudio() async {
-    spinId = await rootBundle.load('assets/audio/wheel.mp3').then((soundData)=> pool.load(soundData));
-    winId = await rootBundle.load('assets/audio/clapping.mp3').then((soundData)=> pool.load(soundData));
-    looseId = await rootBundle.load('assets/audio/loose.mp3').then((soundData)=> pool.load(soundData));
-  }
+  // ///Set Audio Assets
+  // void preloadAudio() async {
+  //   spinId = await rootBundle.load('assets/audio/wheel.mp3').then((soundData)=> pool.load(soundData));
+  //   winId = await rootBundle.load('assets/audio/clapping.mp3').then((soundData)=> pool.load(soundData));
+  //   looseId = await rootBundle.load('assets/audio/loose.mp3').then((soundData)=> pool.load(soundData));
+  // }
 
   @override
   void initState() {
     super.initState();
 
-    pool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
-
-    preloadAudio();
+    // pool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
+    //
+    // preloadAudio();
 
     _controllerCenterRight =
         ConfettiController(duration: const Duration(seconds: 10));
@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
     _controllerCenterLeft.dispose();
     _controllerCenter.dispose();
 
-    pool.dispose();
+    // pool.dispose();
 
     super.dispose();
   }
@@ -91,7 +91,7 @@ class _HomeState extends State<Home> {
     {
       try
       {
-        playWheelSound(); // Start the sound when the wheel starts spinning
+        playWheelSound(cubit: cubit); // Start the sound when the wheel starts spinning
 
         cubit.changeIsDimmed();
 
@@ -117,10 +117,10 @@ class _HomeState extends State<Home> {
   }
 
   ///Start Spinning Sound
-  void playWheelSound() async {
+  void playWheelSound({required AppCubit cubit}) async {
     if (!_isPlaying)
     {
-      spinStream = await pool.play(spinId);
+      cubit.spinStream = await cubit.pool.play(cubit.spinId);
 
       setState(() {
         _isPlaying = true;
@@ -129,10 +129,10 @@ class _HomeState extends State<Home> {
   }
 
   ///Stop Spinning Sound
-  void stopWheelSound() async {
+  void stopWheelSound({required AppCubit cubit}) async {
     if (_isPlaying) {
 
-      await pool.stop(spinStream);
+      await cubit.pool.stop(cubit.spinStream);
 
       setState(() {
         _isPlaying = false;
@@ -190,22 +190,22 @@ class _HomeState extends State<Home> {
                                       ),
                                       colors: cubit.isDimmed?
                                       [
-                                        HexColor('FFFFFF').withOpacity(0.9),
-                                        HexColor('F2E7F2').withOpacity(0.9),
-                                        HexColor('E6CEE5').withOpacity(0.9),
-                                        HexColor('D9B6D8').withOpacity(0.9),
-                                        HexColor('CC9ECB').withOpacity(0.9),
-                                        HexColor('C085BE').withOpacity(0.9),
                                         HexColor('B36DB1').withOpacity(0.9),
+                                        HexColor('C07AB3').withOpacity(0.9),
+                                        HexColor('CC87B5').withOpacity(0.9),
+                                        HexColor('D995B7').withOpacity(0.9),
+                                        HexColor('E6A2B8').withOpacity(0.9),
+                                        HexColor('F2AFBA').withOpacity(0.9),
+                                        HexColor('FFBCBC').withOpacity(0.9),
                                       ]:
                                       [
-                                        HexColor('FFFFFF'),
-                                        HexColor('F2E7F2'),
-                                        HexColor('E6CEE5'),
-                                        HexColor('D9B6D8'),
-                                        HexColor('CC9ECB'),
-                                        HexColor('C085BE'),
                                         HexColor('B36DB1'),
+                                        HexColor('C07AB3'),
+                                        HexColor('CC87B5'),
+                                        HexColor('D995B7'),
+                                        HexColor('E6A2B8'),
+                                        HexColor('F2AFBA'),
+                                        HexColor('FFBCBC'),
                                       ],
                                       speed: Duration(seconds: 3),
                                     ),
@@ -276,23 +276,22 @@ class _HomeState extends State<Home> {
                                       ),
                                       colors: cubit.isDimmed?
                                       [
-                                        HexColor('E6CEE5').withOpacity(0.9),
-                                        HexColor('D9B6D8').withOpacity(0.9),
-                                        HexColor('CC9ECB').withOpacity(0.9),
-                                        HexColor('C085BE').withOpacity(0.9),
                                         HexColor('B36DB1').withOpacity(0.9),
-                                        HexColor('FFFFFF').withOpacity(0.9),
-                                        HexColor('F2E7F2').withOpacity(0.9),
-
+                                        HexColor('C07AB3').withOpacity(0.9),
+                                        HexColor('CC87B5').withOpacity(0.9),
+                                        HexColor('D995B7').withOpacity(0.9),
+                                        HexColor('E6A2B8').withOpacity(0.9),
+                                        HexColor('F2AFBA').withOpacity(0.9),
+                                        HexColor('FFBCBC').withOpacity(0.9),
                                       ]:
                                       [
-                                        HexColor('E6CEE5'),
-                                        HexColor('D9B6D8'),
-                                        HexColor('CC9ECB'),
-                                        HexColor('C085BE'),
                                         HexColor('B36DB1'),
-                                        HexColor('FFFFFF'),
-                                        HexColor('F2E7F2'),
+                                        HexColor('C07AB3'),
+                                        HexColor('CC87B5'),
+                                        HexColor('D995B7'),
+                                        HexColor('E6A2B8'),
+                                        HexColor('F2AFBA'),
+                                        HexColor('FFBCBC'),
                                       ],
                                       speed: Duration(milliseconds: 1000),
                                     ),
@@ -495,10 +494,10 @@ class _HomeState extends State<Home> {
               selected: myStream,
               duration: Duration(seconds: 6),
               onAnimationStart: () {
-                playWheelSound();
+                playWheelSound(cubit: cubit);
               },
               onAnimationEnd: () {
-                stopWheelSound();
+                stopWheelSound(cubit: cubit);
 
                 _dialog(context: context, cubit: cubit);
 
@@ -605,7 +604,7 @@ class _HomeState extends State<Home> {
   ///Show Dialog with the result
   void _dialog({required BuildContext context, required AppCubit cubit}) {
     if (cubit.currentItem != null) {
-      _resultSound(cubit.currentItem!.type!);
+      _resultSound(type: cubit.currentItem!.type!, cubit: cubit);
 
       showDialog(
         context: context,
@@ -656,20 +655,21 @@ class _HomeState extends State<Home> {
     }
   }
 
+
   ///Choose Which Audio to Play With the Dialog
-  void _resultSound(ItemType type) {
+  void _resultSound({required ItemType type, required AppCubit cubit}) {
     switch (type) {
       case ItemType.win:
         _controllerCenterLeft.play();
         _controllerCenterRight.play();
         _controllerCenter.play();
 
-        pool.play(winId);
+        cubit.pool.play(cubit.winId);
 
         break;
 
       case ItemType.loose:
-        pool.play(looseId);
+        cubit.pool.play(cubit.looseId);
 
         break;
 

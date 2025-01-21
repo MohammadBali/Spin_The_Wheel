@@ -123,3 +123,16 @@ class AppResetAttemptsErrorState extends AppStates
   AppResetAttemptsErrorState({required this.message});
 }
 
+//------------------------------------
+
+//LOAD AUDIO ASSETS
+
+class AppLoadAudioAssetsSuccessState extends AppStates{}
+
+class AppLoadAudioAssetsErrorState extends AppStates{
+  final String message;
+
+  AppLoadAudioAssetsErrorState({required this.message});
+}
+
+//------------------------------------
