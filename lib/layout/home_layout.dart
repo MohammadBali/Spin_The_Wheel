@@ -70,18 +70,13 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
         return Directionality(
           textDirection: appDirectionality(),
           child: OrientationBuilder(builder: (context,orientation)=>Scaffold(
-            backgroundColor: cubit.isDarkTheme? currentColorScheme(context).surface : currentColorScheme(context).primaryContainer,
             appBar: (orientation== Orientation.portrait && cubit.isTabBarShown ==true)
                 ? AppBar(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   title:  Text(
                     Localization.translate('appBar_title_home'),
-                    style: TextStyle(
-                        fontFamily: AppCubit.language == 'en'
-                            ? 'WithoutSans'
-                            : 'Cairo'
-                    ),
+
                   ),
-                  backgroundColor: cubit.isDarkTheme? currentColorScheme(context).surface : currentColorScheme(context).primaryContainer,
                   bottom: defaultTabBar(
                       context: context,
                       controller: tabController,
@@ -104,66 +99,29 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
 
                       onTap: (index)
                       {
-                        //cubit.changeTabBar(index);
-                        
-                        if(cubit.tabBarIndex != index && index ==1)
-                        {
-                          _showPasswordDialog(context, cubit, index);
-                        }
-                        else
-                        {
-                          cubit.changeTabBar(index);
-                        }
+                        cubit.changeTabBar(index);
                       },
                   ),
-                  flexibleSpace: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              cubit.isDarkTheme
-                                  ?'assets/images/background/chinese.png'
-                                  :'assets/images/background/sky.jpg',
-                            ),
-                            fit: BoxFit.cover,
-                            opacity: 0.9,
-                          ),
+                flexibleSpace: Stack(
+                  children: [
+                    IgnorePointer(
+                      ignoring: true,
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        opacity: cubit.isDimmed ? dimValue : 0.0, // Control dim level
+                        child: Container(
+                          color: dimColor, // Dim overlay color
                         ),
                       ),
-
-                      IgnorePointer(
-                        ignoring: true,
-                        child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                          opacity: cubit.isDimmed ? dimValue : 0.0, // Control dim level
-                          child: Container(
-                            color: dimColor, // Dim overlay color
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                    ),
+                  ],
+                ),
                 )
                 : null,
 
             body: Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        cubit.isDarkTheme
-                            ?'assets/images/background/chinese.png'
-                            :'assets/images/background/sky.jpg',
-                      ),
-                      fit: BoxFit.cover,
-                      opacity: 0.9,
-                    ),
-                  ),
-                ),
-
                 // Animated Dimmer Overlay
                 IgnorePointer(
                   ignoring: true,
@@ -203,83 +161,4 @@ class _HomeLayoutState extends State<HomeLayout> with TickerProviderStateMixin
     );
   }
 
-  ///Prepare a Dialog to enter password, if correct => Head to Settings Page
-  void _showPasswordDialog(BuildContext context, AppCubit cubit, int index)
-  {
-    showDialog(
-      context: context,
-      builder: (dialogContext)=>defaultAlertDialog(
-        context: dialogContext,
-        title: Localization.translate('enter_pass'),
-        content: StatefulBuilder(
-            builder: (dialogContext, setState)
-            {
-              return SingleChildScrollView(
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      children:
-                      [
-                        Directionality(
-                          textDirection: appDirectionality(),
-                          child: defaultTextFormField(
-                            controller: passController,
-                            keyboard: TextInputType.text,
-                            label: Localization.translate('password_login_tfm'),
-                            prefix: Icons.password_outlined,
-                            isObscure: true,
-                            contentPadding: 12,
-                            validate: (value)
-                            {
-                              if(value!.isEmpty)
-                              {
-                                return Localization.translate('password_login_tfm_error');
-                              }
-
-                              if(value != settingsPassword)
-                              {
-                                return Localization.translate('login_error_toast');
-                              }
-
-                              return null;
-                            },
-
-                          ),
-                        ),
-
-                        const SizedBox(height: 15,),
-
-                        Center(
-                          child: defaultButton(
-                              message: Localization.translate('submit_button'),
-                              type: ButtonType.elevated,
-                              onPressed: ()
-                              {
-                                if(formKey.currentState!.validate())
-                                {
-                                  passController.text='';
-
-                                  Navigator.of(dialogContext).pop();
-                                  cubit.changeTabBar(index);
-                                }
-
-                                else
-                                {
-                                  passController.text='';
-                                }
-
-                              }
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-              );
-            }
-        ),
-      ),
-      barrierDismissible: true,
-
-    );
-  }
 }

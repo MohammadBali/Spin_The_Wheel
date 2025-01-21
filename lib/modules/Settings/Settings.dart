@@ -431,13 +431,6 @@ class _SettingsState extends State<Settings> {
                         const SizedBox(height: 15,),
 
                         Text(
-                          Localization.translate('about_tertiary'),
-                          style: textStyleBuilder(),
-                        ),
-
-                        const SizedBox(height: 15,),
-
-                        Text(
                           Localization.translate('about_email'),
                           style: textStyleBuilder(color: currentColorScheme(context).tertiary),
                         ),

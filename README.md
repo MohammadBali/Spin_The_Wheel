@@ -19,8 +19,6 @@ Home - Settings - Item Details
 Edit an Item - Add an Item - Spin Result
 [![Untitled-2.png](https://i.postimg.cc/y8HD9fx8/Untitled-2.png)](https://postimg.cc/BXmZfB2r)
 
-Customized Background Home DarkMode & LightMode
-[![Untitled-3.png](https://i.postimg.cc/0N4M7HJc/Untitled-3.png)](https://postimg.cc/WDM1v88k)
 
 ## Installation
 

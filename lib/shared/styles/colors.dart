@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-Color seedColor = HexColor('5CE1E6');//Colors.indigoAccent;
+Color seedColor = HexColor('5CE1E6'); // Colors.indigoAccent;
 
 // Light and dark color schemes using `ColorScheme.fromSeed`
 final ColorScheme lightColorScheme = ColorScheme.fromSeed(
   seedColor: seedColor,
   brightness: Brightness.light,
-  dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-  // surface: HexColor('5CE1E6'),
 );
 
 final ColorScheme darkColorScheme = ColorScheme.fromSeed(
   seedColor: seedColor,
   brightness: Brightness.dark,
-  dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-  // surface: HexColor('5CE1E6'),
 );
 
 

@@ -59,11 +59,11 @@ const Map<String,String> en={
 
   //HOME PAGE
 
-  'home_title':'NUA',
+  'home_title':'Spin Now!',
 
-  'home_secondary':'Share The Good Life',
+  'home_secondary':"It's Time to Win",
 
-  'home_secondary_two_lines':'Share The\nGood Life',
+  'home_secondary_two_lines':"It's Time\n to Win",
 
   'enter_pass':'Enter Password',
 
@@ -116,7 +116,7 @@ const Map<String,String> en={
 
   'about_secondary':'This project was executed by:',
 
-  'about_tertiary':'For NUA©',
+  'about_tertiary':'',
 
   'mhd_bali':'Mohammad Bali - محمد البالي',
 
@@ -266,11 +266,11 @@ const Map<String,String> ar={
 
   //HOME PAGE
 
-  'home_title':'NUA',
+  'home_title':'دوري هلق!',
 
-  'home_secondary':'Share The Good Life',
+  'home_secondary':'صار وقت تفوزي',
 
-  'home_secondary_two_lines':'Share The\nGood Life',
+  'home_secondary_two_lines':'صار وقت\n تفوزي',
 
   'enter_pass':'ادخل كلمة السر',
 
@@ -325,7 +325,7 @@ const Map<String,String> ar={
 
   'about_secondary':'تم تنفيذ هذا المشروع من قبل: ',
 
-  'about_tertiary':'NUA© لصالح شركة',
+  'about_tertiary':'',
 
   'mhd_bali':'Mohammad Bali - محمد البالي',
 
